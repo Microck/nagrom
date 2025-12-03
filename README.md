@@ -4,12 +4,12 @@
   </a>
 </p>
 
-<p align="center">nagrom is a self-hostable discord bot designed for rigorous fact-checking. built on python 3.11 and discord.py, it uses llms to verify claims against a tiered hierarchy of trusted sources. features include token-bucket rate limiting, async sqlalchemy database storage, and verifiable citation embeds.</p>
+<p align="center">nagrom is a self-hostable discord bot designed for rigorous fact-checking against a tiered hierarchy of trusted sources. </p>
 
 <p align="center">
-  <a href="LICENSE "><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg " /></a>
-  <a href="https://www.python.org/ "><img alt="python" src="https://img.shields.io/badge/python-3.11+-blue.svg " /></a>
-  <a href="https://github.com/Rapptz/discord.py "><img alt="discord" src="https://img.shields.io/badge/discord-py-blue.svg " /></a>
+  <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+  <a href="https://www.python.org/"><img alt="python" src="https://img.shields.io/badge/python-3.11+-blue.svg" /></a>
+  <a href="https://github.com/Rapptz/discord.py"><img alt="discord" src="https://img.shields.io/badge/discord-py-blue.svg" /></a>
 </p>
 
 ---
