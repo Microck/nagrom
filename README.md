@@ -1,14 +1,16 @@
-# nagrom
+<p align="center">
+  <a href="https://github.com/Microck/nagrom">
+    <img src="assets/logo/icon.png" alt="logo" width="300">
+  </a>
+</p>
 
-![nagrom logo](assets/logo/logo.png)
+<p align="center">nagrom is a self-hostable discord bot designed for rigorous fact-checking. built on python 3.11 and discord.py, it uses llms to verify claims against a tiered hierarchy of trusted sources. features include token-bucket rate limiting, async sqlalchemy database storage, and verifiable citation embeds.</p>
 
-**nagrom** is a discord bot that fact-checks your friends with the unyielding authority of morgan freeman saying "true." it's self-hostable, verifies claims against real sources, and returns structured data so you can prove who is wrong with charts and confidence scores.
-
-name is morgan inverted. because the meme is "he's right you know" and this bot tells you if he is actually right.
-
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
-[![discord](https://img.shields.io/badge/discord-py-blue.svg)](https://github.com/Rapptz/discord.py)
+<p align="center">
+  <a href="LICENSE "><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg " /></a>
+  <a href="https://www.python.org/ "><img alt="python" src="https://img.shields.io/badge/python-3.11+-blue.svg " /></a>
+  <a href="https://github.com/Rapptz/discord.py "><img alt="discord" src="https://img.shields.io/badge/discord-py-blue.svg " /></a>
+</p>
 
 ---
 
