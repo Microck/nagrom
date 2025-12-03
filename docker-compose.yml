@@ -1,0 +1,10 @@
+services:
+  ava:
+    build: .
+    container_name: ava_bot
+    restart: unless-stopped
+    volumes:
+      - ./config:/app/config
+      - ./data:/app/data
+    environment:
+      - PYTHONUNBUFFERED=1
