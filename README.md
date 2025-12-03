@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/Microck/nagrom">
-    <img src="assets/logo/icon.png" alt="logo" width="300">
+    <img src="assets/logo/icon.png" alt="logo" width="150">
   </a>
 </p>
 
@@ -214,6 +214,4 @@ the heavy lifting is done by these libraries. big thanks to the maintainers.
 
 ### license
 
-mit license.
-
-built by [microck](https://github.com/microck).
+o'saasy license
