@@ -7,16 +7,14 @@
 <p align="center">nagrom is a self-hostable discord bot designed for rigorous fact-checking against a tiered hierarchy of trusted sources. </p>
 
 <p align="center">
-  <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-MIT-blue.svg" /></a>
+  <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-O’Saasy-pink.svg" /></a>
   <a href="https://www.python.org/"><img alt="python" src="https://img.shields.io/badge/python-3.11+-blue.svg" /></a>
-  <a href="https://github.com/Rapptz/discord.py"><img alt="discord" src="https://img.shields.io/badge/discord-py-blue.svg" /></a>
+  <a href="https://github.com/Rapptz/discord.py"><img alt="discord" src="https://img.shields.io/badge/discord-py-lilac.svg" /></a>
 </p>
 
 ---
 
 ### quickstart
-
-wanna get running immediately? here is the speedrun.
 
 ```bash
 # clone the repo
