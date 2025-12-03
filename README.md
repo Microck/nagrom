@@ -1,4 +1,3 @@
-```markdown
 # nagrom
 
 ![nagrom logo](assets/logo/logo.png)
@@ -215,7 +214,6 @@ the heavy lifting is done by these libraries. big thanks to the maintainers.
 
 ### license
 
-mit license. do whatever you want with it, just don't blame me if the bot hallucinates that you owe it money.
+mit license.
 
 built by [microck](https://github.com/microck).
-```
