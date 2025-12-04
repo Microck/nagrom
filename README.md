@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/Microck/nagrom">
-    <img src="assets/logo/icon.png" alt="logo" width="150">
+    <img src="assets/logo/iconsmall.png" alt="logo" width="300">
   </a>
 </p>
 
@@ -21,7 +21,7 @@
 git clone https://github.com/microck/nagrom.git
 cd nagrom
 
-# setup venv because we aren't savages
+# setup venv if you want
 python -m venv .venv
 source .venv/bin/activate  # or .venv\Scripts\activate on windows
 
@@ -52,10 +52,10 @@ python -m src
 
 ### features
 
-nagrom isn't just a wrapper around chatgpt. it enforces a specific logic loop to verify facts.
+nagrom isn't a wrapper around an llm. it enforces a specific logic loop to verify facts.
 
-*   **bring your own key:** supports openrouter, openai, anthropic, or generic openai-compatible endpoints. i'm not paying for your tokens.
-*   **strict verification:** uses a tiered source hierarchy. snopes ranks higher than reddit.
+*   **bring your own key (BYOK):** supports openrouter, openai, anthropic, or generic openai-compatible endpoints.
+*   **strict verification:** uses a tiered source hierarchy. snopes ranks higher than quora, for obvious reasons.
 *   **async architecture:** built on `discord.py` 2.4+ and `aiohttp`. no blocking calls allowed here.
 *   **structured output:** the llm is forced to output json, which we parse into pretty embeds.
 *   **rate limiting:** built-in token buckets and cooldowns so your server doesn't bankrupt you.
@@ -66,9 +66,9 @@ nagrom isn't just a wrapper around chatgpt. it enforces a specific logic loop to
 
 ### how it works
 
-nagrom acts as a "logic engine." it doesn't just chat. when you ask it to verify something, it goes through a pipeline:
+nagrom acts as a logic engine. when you ask it to verify something, it goes through a pipeline:
 
-1.  **intent classification:** figures out if you are asking for a fact check or just trying to write a poem.
+1.  **intent classification:** figures out if you are asking for a fact check or just trying to prompt inject.
 2.  **extraction:** pulls out the claims, dates, and entities.
 3.  **retrieval:** looks for sources based on a trust tier (tier 1 is reuters/snopes, tier 4 is twitter).
 4.  **synthesis:** compares sources against internal knowledge. external evidence wins.
@@ -165,11 +165,11 @@ export OPENROUTER_KEY="your_key_here"
 
 ### usage
 
-once the bot is running and invited to your server, you have four ways to annoy your friends with facts.
+once the bot is running and invited to your server, you have four ways to fact-check.
 
 #### 1. the reply (recommended)
 someone posts something wrong. you reply to their message and tag the bot.
-> **user a:** the earth is flat actually.
+> **user a:** google doesn't steal anyones data without their permission.
 > **you (replying to a):** @nagrom check this.
 
 #### 2. the slash command
@@ -178,10 +178,10 @@ good for settling bets in real time.
 
 #### 3. direct mention
 just ping the bot with a statement.
-> `@nagrom did the pope wear a puffer jacket?`
+> `@nagrom is it true that the beef industry and fashion and textiles industries use ~90x more water than data centers used for AI?`
 
 #### 4. context menu
-right click a message, go to **apps**, and select **check facts**. this is the stealthy way to do it.
+right click a message, go to **apps**, and select **check facts**. yes, im lazy to type too.
 
 ---
 
@@ -197,18 +197,6 @@ things go wrong. here is how to fix them.
 | **rate limited immediately** | clock drift | check your server time. or you set the limit to 1 request per day. |
 
 > **warning:** do not use small local models (like 7b params) for this. they are terrible at following the strict json schema required for the verification result and will likely hallucinate the format.
-
----
-
-### dependencies
-
-the heavy lifting is done by these libraries. big thanks to the maintainers.
-
-*   `discord.py` for the bot interface
-*   `aiohttp` for async requests
-*   `sqlalchemy` + `aiosqlite` for the database
-*   `pydantic` for strict config validation
-*   `mcp` for the model context protocol support
 
 ---
 
