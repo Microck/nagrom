@@ -167,20 +167,20 @@ export OPENROUTER_KEY="your_key_here"
 
 once the bot is running and invited to your server, you have four ways to fact-check.
 
-#### 1. the reply (recommended)
+#### 1. reply (recommended)
 someone posts something wrong. you reply to their message and tag the bot.
 > **user a:** google doesn't steal anyones data without their permission.
 > **you (replying to a):** @nagrom check this.
 
-#### 2. the slash command
+#### 2. command
 good for settling bets in real time.
 > `/check statement: the us gdp grew by 2.5% in 2023`
 
-#### 3. direct mention
+#### 3. mention
 just ping the bot with a statement.
-> `@nagrom is it true that the beef industry and fashion and textiles industries use ~90x more water than data centers used for AI?`
+> `@nagrom is it true that the beef industry and fashion/textiles industries use ~90x more water than data centers used for AI?`
 
-#### 4. context menu
+#### 4. menu
 right click a message, go to **apps**, and select **check facts**. yes, im lazy to type too.
 
 ---
