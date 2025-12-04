@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/Microck/nagrom">
-    <img src="/assets/logo/logosmall.png" alt="logo" width="300">
+    <img src="/assets/logo/logosmall.png" alt="logo" width="200">
   </a>
 </p>
 
