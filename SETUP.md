@@ -53,7 +53,7 @@
 
 ### Google AI Studio (Default)
 - **Provider:** `google_ai_studio`
-- **Default Model:** `gemini-2.0-flash-exp`
+- **Default Model:** `gemini-2.5-flash`
 - **API Key:** Get from [Google AI Studio](https://aistudio.google.com/app/apikey)
 - **Base URL:** `https://generativelanguage.googleapis.com`
 
@@ -117,7 +117,7 @@ llm:
   provider: "google_ai_studio"
   api_key: "YOUR_API_KEY"
   base_url: "https://generativelanguage.googleapis.com"
-  model: "gemini-2.0-flash-exp"
+  model: "gemini-2.5-flash"
   temperature: 0.0
   max_tokens: 500
 
@@ -134,12 +134,12 @@ rate_limits:
 
 ## Features
 
-- ✅ **Multi-provider Support:** Google AI Studio, OpenAI, OpenRouter, Anthropic, Custom
-- ✅ **Visual Setup GUI:** Modern web interface for configuration
-- ✅ **CLI Setup:** Interactive command-line setup
-- ✅ **Default Avatar:** Automatically sets bot avatar to logo
-- ✅ **Rate Limiting:** Configurable cooldowns and limits
-- ✅ **Fact Checking:** AI-powered fact verification with source hierarchy
+- **Multi-provider Support:** Google AI Studio, OpenAI, OpenRouter, Anthropic, Custom
+- **Visual Setup GUI:** Modern web interface for configuration
+- **CLI Setup:** Interactive command-line setup
+- **Default Avatar:** Automatically sets bot avatar to logo
+- **Rate Limiting:** Configurable cooldowns and limits
+- **Fact Checking:** AI-powered fact verification with source hierarchy
 
 ## Troubleshooting
 

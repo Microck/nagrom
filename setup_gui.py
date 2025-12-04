@@ -15,7 +15,7 @@ state = {
         "provider": "google_ai_studio",
         "api_key": "",
         "base_url": "https://generativelanguage.googleapis.com",
-        "model": "gemini-2.0-flash-exp",
+        "model": "gemini-2.5-flash",
         "temperature": 0.0,
         "max_tokens": 500,
     },
@@ -54,7 +54,7 @@ def update_llm_defaults(e):
         state["llm"]["model"] = "openai/gpt-4o-mini"
     elif provider == "google_ai_studio" or provider == "google":
         state["llm"]["base_url"] = "https://generativelanguage.googleapis.com"
-        state["llm"]["model"] = "gemini-2.0-flash-exp"
+        state["llm"]["model"] = "gemini-2.5-flash"
     elif provider == "anthropic":
         state["llm"]["base_url"] = "https://api.anthropic.com"
         state["llm"]["model"] = "claude-3-5-sonnet-20241022"
@@ -69,13 +69,13 @@ def save_config():
         
         # Fix model name for Google AI Studio
         if state["llm"]["provider"] == "google_ai_studio" and state["llm"]["model"] == "gemini-2.0-flash-exp":
-            state["llm"]["model"] = "gemini-2.0-flash-exp"
+            state["llm"]["model"] = "gemini-2.5-flash"
         
         with open(config_path, "w") as f:
             yaml.dump(state, f, default_flow_style=False, sort_keys=False)
         
-        ui.notify(f"✅ Configuration saved to {config_path}!", type="positive", timeout=5000)
-        ui.notify("🚀 You can now run the bot with: python -m src", type="info", timeout=5000)
+        ui.notify(f"Configuration saved to {config_path}!", type="positive", timeout=5000)
+        ui.notify("You can now run the bot with: python -m src", type="info", timeout=5000)
     except Exception as e:
         ui.notify(f"❌ Error saving: {e}", type="negative", timeout=5000)
 
@@ -102,7 +102,7 @@ def main_page():
                 # Step 1: Discord
                 with ui.step("Discord Configuration"):
                     with ui.card().classes("w-full p-4 bg-white/5 rounded-lg mb-4"):
-                        ui.label("🤖 Discord Bot Settings").classes("text-lg font-semibold mb-3 text-white")
+                        ui.label("Discord Bot Settings").classes("text-lg font-semibold mb-3 text-white")
                         ui.input("Bot Token", password=True, placeholder="Paste your Discord bot token here").bind_value(state["discord"], "token").classes("w-full q-mb-md")
                         ui.input("Command Prefix", placeholder="Default: t!").bind_value(state["discord"], "prefix").classes("w-full q-mb-md")
                         ui.number("Owner ID (Optional)", format="%.0f", placeholder="Your Discord user ID").bind_value(state["discord"], "owner_id").classes("w-full")
@@ -113,7 +113,7 @@ def main_page():
                 # Step 2: LLM
                 with ui.step("AI / LLM Settings"):
                     with ui.card().classes("w-full p-4 bg-white/5 rounded-lg mb-4"):
-                        ui.label("🧠 AI Provider Configuration").classes("text-lg font-semibold mb-3 text-white")
+                        ui.label("AI Provider Configuration").classes("text-lg font-semibold mb-3 text-white")
                         ui.select(
                             ["google_ai_studio", "openai", "openrouter", "anthropic", "custom"], 
                             label="AI Provider", 
@@ -144,7 +144,7 @@ def main_page():
                 # Step 3: Rate Limits
                 with ui.step("Rate Limits & Security"):
                     with ui.card().classes("w-full p-4 bg-white/5 rounded-lg mb-4"):
-                        ui.label("⚡ Rate Limiting Settings").classes("text-lg font-semibold mb-3 text-white")
+                        ui.label("Rate Limiting Settings").classes("text-lg font-semibold mb-3 text-white")
                         ui.markdown("Configure rate limits to prevent spam and manage API costs.").classes("text-sm text-grey-300 mb-4")
                         
                         with ui.grid(columns=2).classes("w-full gap-4"):

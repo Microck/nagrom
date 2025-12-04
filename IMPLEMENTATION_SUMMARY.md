@@ -1,55 +1,55 @@
 # Discord Bot Setup - Implementation Summary
 
-## ✅ Changes Implemented
+## Changes Implemented
 
 ### 1. **Updated Dependencies** (`requirements.txt`)
 - Added `nicegui>=2.0.0` for the GUI setup interface
 - Added `google-generativeai>=0.8.0` for Google AI Studio support
 
-### 2. **New Google AI Studio Provider** (`src/llm/google_ai_studio.py`)
+### 2. New Google AI Studio Provider (`src/llm/google_ai_studio.py`)
 - Complete implementation of Google AI Studio provider
 - Supports async text generation
 - JSON response parsing with error handling
 - Uses Google's official SDK with proper configuration
 
-### 3. **Enhanced Bot Core** (`src/bot.py`)
+### 3. Enhanced Bot Core (`src/bot.py`)
 - Added provider factory function to support multiple LLM providers
 - Integrated Google AI Studio provider
 - Added automatic bot avatar setting using logo.png
 - Fixed imports and provider selection logic
 
-### 4. **Modern GUI Setup** (`setup_gui.py`)
+### 4. Modern GUI Setup (`setup_gui.py`)
 - Complete redesign with modern gradient background
 - Card-based layout with glassmorphism effects
-- Added Google AI Studio as default provider (gemini-2.0-flash-exp)
+- Added Google AI Studio as default provider (gemini-2.5-flash)
 - Enhanced provider information and tooltips
 - Better visual feedback and notifications
 - Default prefix changed to "t!" as requested
 
-### 5. **Enhanced CLI Setup** (`setup.sh`)
+### 5. Enhanced CLI Setup (`setup.sh`)
 - Added Google AI Studio as default provider option
 - Updated provider descriptions and examples
 - Added support for all providers including Anthropic
 - Improved user guidance and error handling
 
-### 6. **Fixed Admin Commands** (`src/commands/admin.py`)
+### 6. Fixed Admin Commands (`src/commands/admin.py`)
 - Fixed syntax error (unterminated string)
 - Added missing imports
 - Completed the cog implementation
 
-### 7. **Updated Default Configuration** (`config/bot.yaml`)
+### 7. Updated Default Configuration (`config/bot.yaml`)
 - Set Discord token to provided placeholder
 - Changed default prefix to "t!"
 - Set provider to "google_ai_studio"
-- Set model to "gemini-2.0-flash-exp"
+- Set model to "gemini-2.5-flash"
 - Added provided OpenRouter API key
 
-### 8. **Added Testing and Documentation**
+### 8. Added Testing and Documentation
 - Created `test_setup.py` for verification
 - Created `SETUP.md` with comprehensive setup instructions
 - Added troubleshooting guide
 
-## 🎯 Key Features
+## Key Features
 
 ### Multi-Provider Support
 - **Google AI Studio** (Default): Direct integration with Google's Gemini models
@@ -66,10 +66,10 @@
 ### Default Configuration
 - **Command Prefix**: `t!`
 - **AI Provider**: Google AI Studio
-- **Model**: gemini-2.0-flash-exp
+- **Model**: gemini-2.5-flash
 - **Avatar**: Automatically sets bot avatar to `assets/logo/logo.png`
 
-## 🚀 Usage Instructions
+## Usage Instructions
 
 ### Quick Start (GUI)
 ```bash
@@ -100,7 +100,7 @@ source .venv/bin/activate
 python -m src
 ```
 
-## 🔧 Technical Improvements
+## Technical Improvements
 
 ### Provider Factory Pattern
 - Clean separation of concerns for different LLM providers
@@ -124,7 +124,7 @@ python -m src
 - Proper file permissions
 - Input validation
 
-## ✅ Verification Results
+## Verification Results
 
 All tests pass successfully:
 - ✅ Configuration loading
@@ -134,14 +134,14 @@ All tests pass successfully:
 - ✅ CLI script syntax
 - ✅ Bot initialization (requires Discord intents)
 
-## 📝 Notes
+## Notes
 
 1. **Discord Intents**: The bot requires "Message Content Intent" to be enabled in the Discord Developer Portal
 2. **API Keys**: Users need to obtain their own API keys from the respective providers
 3. **Avatar**: The bot will automatically set its avatar to the logo if no avatar is currently set
 4. **Rate Limiting**: Default rate limits are configured to prevent API abuse
 
-## 🎉 Ready to Use
+## Ready to Use
 
 The Discord bot setup is now complete with:
 - Modern GUI configuration interface

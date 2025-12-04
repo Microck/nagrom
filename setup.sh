@@ -100,7 +100,7 @@ LLM_PROVIDER=${LLM_PROVIDER:-google_ai_studio}
 case "$LLM_PROVIDER" in
   google_ai_studio|google)
     DEFAULT_BASE_URL="https://generativelanguage.googleapis.com"
-    DEFAULT_MODEL="gemini-2.0-flash-exp"
+    DEFAULT_MODEL="gemini-2.5-flash"
     ;;
   openrouter)
     DEFAULT_BASE_URL="https://openrouter.ai/api/v1"
@@ -131,7 +131,7 @@ LLM_BASE_URL=${LLM_BASE_URL:-$DEFAULT_BASE_URL}
 echo
 echo "Model name tells the provider which model to use."
 echo "Examples:"
-echo "  Google AI Studio: gemini-2.0-flash-exp"
+echo "  Google AI Studio: gemini-2.5-flash"
 echo "  OpenAI:           gpt-4o-mini"
 echo "  OpenRouter:       openai/gpt-4o-mini"
 echo "  Anthropic:        claude-3-5-sonnet-20241022"
