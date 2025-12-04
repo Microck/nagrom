@@ -86,19 +86,29 @@ DISCORD_OWNER=${DISCORD_OWNER:-0}
 echo
 echo "=== LLM Provider Configuration ==="
 echo "Supported providers in this config:"
-echo "  - openai      (api.openai.com)"
-echo "  - openrouter  (openrouter.ai)"
+echo "  - google_ai_studio  (Google's Gemini models - recommended)"
+echo "  - openai           (api.openai.com)"
+echo "  - openrouter       (openrouter.ai)"
+echo "  - anthropic        (anthropic.com)"
 echo "You can also type a custom provider name."
 echo
 
-read -r -p "LLM provider name [openai/openrouter/custom] (default 'openai'): " LLM_PROVIDER
-LLM_PROVIDER=${LLM_PROVIDER:-openai}
+read -r -p "LLM provider name [google_ai_studio/openai/openrouter/anthropic/custom] (default 'google_ai_studio'): " LLM_PROVIDER
+LLM_PROVIDER=${LLM_PROVIDER:-google_ai_studio}
 
 # Choose sensible defaults based on provider
 case "$LLM_PROVIDER" in
+  google_ai_studio|google)
+    DEFAULT_BASE_URL="https://generativelanguage.googleapis.com"
+    DEFAULT_MODEL="gemini-2.0-flash-exp"
+    ;;
   openrouter)
     DEFAULT_BASE_URL="https://openrouter.ai/api/v1"
     DEFAULT_MODEL="openai/gpt-4o-mini"
+    ;;
+  anthropic)
+    DEFAULT_BASE_URL="https://api.anthropic.com"
+    DEFAULT_MODEL="claude-3-5-sonnet-20241022"
     ;;
   openai|*)
     DEFAULT_BASE_URL="https://api.openai.com/v1"
@@ -109,8 +119,10 @@ esac
 echo
 echo "The base URL is where your LLM API requests are sent."
 echo "Examples:"
-echo "  OpenAI:      https://api.openai.com/v1"
-echo "  OpenRouter:  https://openrouter.ai/api/v1"
+echo "  Google AI Studio: https://generativelanguage.googleapis.com"
+echo "  OpenAI:           https://api.openai.com/v1"
+echo "  OpenRouter:       https://openrouter.ai/api/v1"
+echo "  Anthropic:        https://api.anthropic.com"
 echo
 
 read -r -p "LLM base URL (default '$DEFAULT_BASE_URL'): " LLM_BASE_URL
@@ -119,8 +131,10 @@ LLM_BASE_URL=${LLM_BASE_URL:-$DEFAULT_BASE_URL}
 echo
 echo "Model name tells the provider which model to use."
 echo "Examples:"
-echo "  OpenAI:      gpt-4o-mini"
-echo "  OpenRouter:  openai/gpt-4o-mini"
+echo "  Google AI Studio: gemini-2.0-flash-exp"
+echo "  OpenAI:           gpt-4o-mini"
+echo "  OpenRouter:       openai/gpt-4o-mini"
+echo "  Anthropic:        claude-3-5-sonnet-20241022"
 echo
 
 read -r -p "LLM model name (default '$DEFAULT_MODEL'): " LLM_MODEL

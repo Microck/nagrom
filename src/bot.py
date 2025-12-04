@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 from dataclasses import dataclass
 from typing import Literal, Optional, Tuple
 
@@ -9,7 +10,10 @@ import discord
 from discord.ext import commands
 
 from .config_manager import BotConfig
+from .llm.provider import LLMProvider
 from .llm.openai_compatible import OpenRouterProvider
+from .llm.google_ai_studio import GoogleAIStudioProvider
+from .llm.anthropic import AnthropicProvider
 from .models.database import DatabaseManager, FactCheck
 from .models.verification import VerificationResult
 from .utils.rate_limiter import RateLimiter
@@ -17,6 +21,18 @@ from .utils.webhook_manager import WebhookManager
 
 
 logger = logging.getLogger(__name__)
+
+
+def create_llm_provider(config: BotConfig) -> LLMProvider:
+    """Factory function to create the appropriate LLM provider based on config."""
+    provider_name = config.llm.provider.lower()
+    
+    if provider_name == "google_ai_studio" or provider_name == "google":
+        return GoogleAIStudioProvider(config.llm, "config/system_prompt.txt")
+    elif provider_name == "anthropic":
+        return AnthropicProvider(config.llm, "config/system_prompt.txt")
+    else:  # Default to OpenAI-compatible (openai, openrouter, custom)
+        return OpenRouterProvider(config.llm, "config/system_prompt.txt")
 
 
 @dataclass
@@ -47,7 +63,7 @@ class AVABot(commands.Bot):
         self.rate_limiter = RateLimiter(config.rate_limits)
         self.webhook_manager = WebhookManager()
 
-        self.llm = OpenRouterProvider(config.llm, "config/system_prompt.txt")
+        self.llm = create_llm_provider(config)
 
         self.fact_check_queue: asyncio.Queue[FactCheckJob] = asyncio.Queue(
             maxsize=config.rate_limits.queue_max_size
@@ -86,6 +102,20 @@ class AVABot(commands.Bot):
 
     async def on_ready(self) -> None:
         logger.info("Logged in as %s (ID: %s)", self.user, self.user.id if self.user else "N/A")
+        
+        # Set bot avatar to default logo if not already set
+        try:
+            if self.user and self.user.avatar is None:
+                logo_path = "assets/logo/logo.png"
+                if os.path.exists(logo_path):
+                    with open(logo_path, "rb") as f:
+                        avatar_data = f.read()
+                    await self.user.edit(avatar=avatar_data)
+                    logger.info("Bot avatar set to default logo")
+                else:
+                    logger.warning("Logo file not found at %s", logo_path)
+        except Exception as exc:
+            logger.warning("Could not set bot avatar: %s", exc)
 
     async def close(self) -> None:
         logger.info("Shutting down AVA")

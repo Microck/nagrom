@@ -1,3 +1,4 @@
+import discord
 from discord.ext import commands
 from ..bot import AVABot
 
@@ -31,4 +32,9 @@ class AdminCommands(commands.Cog):
             try:
                 result = await conn.execute(discord.utils.text(query))
                 rows = result.fetchall()
-                await ctx.send(f"Result: {len(rows)} rows returned.\n
+                await ctx.send(f"Result: {len(rows)} rows returned.")
+            except Exception as e:
+                await ctx.send(f"SQL Error: {e}")
+
+async def setup(bot: AVABot):
+    await bot.add_cog(AdminCommands(bot))
