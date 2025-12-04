@@ -1,22 +1,22 @@
 discord:
-  token: "YOUR_DISCORD_TOKEN"
-  prefix: "!"
+  token: "YOUR_DISCORD_TOKEN_HERE"
+  prefix: "t!"
   owner_id: 0
 
 llm:
-  provider: "openai"        # or "openrouter", "anthropic", "mcp"
-  api_key: "YOUR_API_KEY"
-  base_url: "https://api.openai.com/v1"
-  model: "gpt-4o-mini"
-  temperature: 0.0          # default 0.0 as per checklist
+  provider: "google_ai_studio"
+  api_key: "YOUR_GOOGLE_AI_STUDIO_API_KEY_HERE"
+  base_url: "https://generativelanguage.googleapis.com"
+  model: "gemini-2.5-flash"
+  temperature: 0.0
   max_tokens: 500
 
 database:
   url: "sqlite+aiosqlite:///data/ava.db"
 
 rate_limits:
-  user_cooldown: 30         # default 30s as per checklist
+  user_cooldown: 30
   daily_guild_limit: 100
   bucket_tokens: 5
   bucket_refill_rate: 1.0
-  queue_max_size: 50        # processing queue max size
+  queue_max_size: 50
