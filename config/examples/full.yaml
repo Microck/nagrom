@@ -1,0 +1,22 @@
+discord:
+  token: "YOUR_DISCORD_TOKEN"
+  prefix: "!"
+  owner_id: 123456789012345678
+
+llm:
+  provider: "openai"        # or "openrouter"
+  api_key: "YOUR_LLM_API_KEY"
+  base_url: "https://api.openai.com/v1"
+  model: "gpt-4o-mini"
+  temperature: 0.0
+  max_tokens: 800
+
+database:
+  url: "sqlite+aiosqlite:///data/ava.db"
+
+rate_limits:
+  user_cooldown: 30
+  daily_guild_limit: 250
+  bucket_tokens: 10
+  bucket_refill_rate: 0.5
+  queue_max_size: 50
