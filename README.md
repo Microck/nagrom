@@ -1,21 +1,20 @@
-```markdown
-# nagrom
+<p align="center">
+  <a href="https://github.com/Microck/nagrom">
+    <img src="assets/logo/icon.png" alt="logo" width="150">
+  </a>
+</p>
 
-![nagrom logo](assets/logo/logo.png)
+<p align="center">nagrom is a self-hostable discord bot designed for rigorous fact-checking against a tiered hierarchy of trusted sources. </p>
 
-**nagrom** is a discord bot that fact-checks your friends with the unyielding authority of morgan freeman saying "true." it's self-hostable, verifies claims against real sources, and returns structured data so you can prove who is wrong with charts and confidence scores.
-
-name is morgan inverted. because the meme is "he's right you know" and this bot tells you if he is actually right.
-
-[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
-[![python](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/)
-[![discord](https://img.shields.io/badge/discord-py-blue.svg)](https://github.com/Rapptz/discord.py)
+<p align="center">
+  <a href="LICENSE"><img alt="license" src="https://img.shields.io/badge/license-O’Saasy-pink.svg" /></a>
+  <a href="https://www.python.org/"><img alt="python" src="https://img.shields.io/badge/python-3.11+-blue.svg" /></a>
+  <a href="https://github.com/Rapptz/discord.py"><img alt="discord" src="https://img.shields.io/badge/discord-py-lilac.svg" /></a>
+</p>
 
 ---
 
 ### quickstart
-
-wanna get running immediately? here is the speedrun.
 
 ```bash
 # clone the repo
@@ -215,7 +214,4 @@ the heavy lifting is done by these libraries. big thanks to the maintainers.
 
 ### license
 
-mit license. do whatever you want with it, just don't blame me if the bot hallucinates that you owe it money.
-
-built by [microck](https://github.com/microck).
-```
+o'saasy license
