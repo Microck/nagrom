@@ -1,0 +1,35 @@
+graph LR
+    subgraph "Análise Custo-Benefício"
+        A[Método de Verificação] --> B[Ganho de Precisão]
+        A --> C[Impacto na Latência]
+        A --> D[Factor de Custo]
+        A --> E[Escalabilidade]
+    end
+    
+    subgraph "Comparação de Métodos"
+        F[RAG de Fonte Única]
+        G[RAG Multi-Fonte]
+        H[Framework DebateCV]
+        I[Protocolo SAFE]
+        J[Abordagem Híbrida]
+    end
+    
+    F --> A
+    G --> A
+    H --> A
+    I --> A
+    J --> A
+    
+    subgraph "Métricas de Desempenho"
+        K[Precisão: 65-75%]
+        L[Precisão: 75-85%]
+        M[Precisão: 85-92%]
+        N[Precisão: 88-94%]
+        O[Precisão: 90-96%]
+    end
+    
+    F --> K
+    G --> L
+    H --> M
+    I --> N
+    J --> O

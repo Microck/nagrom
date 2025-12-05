@@ -1,0 +1,41 @@
+graph TD
+    subgraph "エージェント検証アーキテクチャ"
+        A[ユーザーインターフェース層] --> B[意図分類モジュール]
+        B --> C[主張抽出エンジン]
+        C --> D[ソース選択アルゴリズム]
+        D --> E[マルチモーダル検索システム]
+        E --> F[クロス検証エンジン]
+        F --> G[信頼度スコアリングモジュール]
+        G --> H[応答統合層]
+        H --> I[引用生成器]
+        I --> J[検証済み出力]
+    end
+    
+    subgraph "外部知識ソース"
+        K[レベル1: 検証DB]
+        L[レベル2: 公的記録]
+        M[レベル3: ニュースアーカイブ]
+        N[レベル4: 社会コンテキスト]
+    end
+    
+    E --> K
+    E --> L
+    E --> M
+    E --> N
+    
+    subgraph "モデルオーケストレーション"
+        O[主要推論モデル]
+        P[専門モデル]
+        Q[検証モデル]
+    end
+    
+    F --> O
+    F --> P
+    F --> Q
+    
+    style A fill:#f0f8ff,stroke:#333,stroke-width:2px
+    style J fill:#e6ffe6,stroke:#333,stroke-width:2px
+    style K fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style L fill:#fff0e6,stroke:#333,stroke-width:1px
+    style M fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style N fill:#f0f0f0,stroke:#333,stroke-width:1px

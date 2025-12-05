@@ -1,0 +1,35 @@
+graph TD
+    A[Benutzeranfrage] --> B{Intention-Klassifizierung}
+    B -->|Faktisch| C[Verifizierungsschleife]
+    B -->|Kreativ| D[Direkte Antwort]
+    C --> E[Extraktion von Behauptungen]
+    E --> F[Fokussierte Suche]
+    F --> G[Kreuzvalidierung]
+    G --> H[Synthese und Zitierung]
+    H --> I[Verifizierte Antwort]
+    
+    subgraph "Verifizierungsschleife"
+        E
+        F
+        G
+        H
+    end
+    
+    subgraph "Vertrauenswürdigkeits-Hierarchie"
+        J[Stufe 1: Primärverifizierung]
+        K[Stufe 2: Institutionelle Aufzeichnungen]
+        L[Stufe 3: Renommierte Berichterstattung]
+        M[Stufe 4: Menge/Konsens]
+    end
+    
+    F --> J
+    F --> K
+    F --> L
+    F --> M
+    
+    style A fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style I fill:#e6f7ff,stroke:#333,stroke-width:2px
+    style J fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style K fill:#fff0e6,stroke:#333,stroke-width:1px
+    style L fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style M fill:#f0f0f0,stroke:#333,stroke-width:1px

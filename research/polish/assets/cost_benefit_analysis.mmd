@@ -1,0 +1,35 @@
+graph LR
+    subgraph "Analiza Kosztów i Korzyści"
+        A[Metoda Weryfikacji] --> B[Przyrost Dokładności]
+        A --> C[Wpływ na Opóźnienie]
+        A --> D[Współczynnik Kosztu]
+        A --> E[Skalowalność]
+    end
+    
+    subgraph "Porównanie Metod"
+        F[RAG z Jednego Źródła]
+        G[RAG z Wielu Źródeł]
+        H[Framework DebateCV]
+        I[Protokół SAFE]
+        J[Metoda Hybrydowa]
+    end
+    
+    F --> A
+    G --> A
+    H --> A
+    I --> A
+    J --> A
+    
+    subgraph "Metryki Wydajności"
+        K[Dokładność: 65-75%]
+        L[Dokładność: 75-85%]
+        M[Dokładność: 85-92%]
+        N[Dokładność: 88-94%]
+        O[Dokładność: 90-96%]
+    end
+    
+    F --> K
+    G --> L
+    H --> M
+    I --> N
+    J --> O

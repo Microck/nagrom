@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant U as 用户
+    participant IC as 意图分类器
+    participant CE as 断言抽取器
+    participant SS as 来源选择器
+    participant RS as 检索系统
+    participant VE as 验证引擎
+    participant CS as 置信度评分
+    participant RSyn as 回答合成器
+    
+    U->>IC: 发送请求
+    IC->>IC: 分析意图
+    alt 事实类查询
+        IC->>CE: 抽取论断
+        CE->>SS: 识别论断类型
+        SS->>RS: 选择来源
+        RS->>RS: 并行检索
+        RS->>VE: 已检索证据
+        VE->>VE: 交叉验证
+        VE->>CS: 验证结果
+        CS->>CS: 计算置信度
+        CS->>RSyn: 已打分论断
+        RSyn->>RSyn: 生成回答
+        RSyn->>U: 已验证回答
+    else 创意查询
+        IC->>RSyn: 直接处理
+        RSyn->>U: 创意回答
+    end

@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant U as ユーザー
+    participant IC as 意図分類器
+    participant CE as 主張抽出器
+    participant SS as ソースセレクター
+    participant RS as 検索システム
+    participant VE as 検証エンジン
+    participant CS as 信頼度スコア
+    participant RSyn as 応答合成器
+    
+    U->>IC: クエリ送信
+    IC->>IC: 意図解析
+    alt 事実系クエリ
+        IC->>CE: 主張抽出
+        CE->>SS: 主張タイプ識別
+        SS->>RS: ソース選択
+        RS->>RS: 並列検索
+        RS->>VE: 取得証拠
+        VE->>VE: クロス検証
+        VE->>CS: 検証結果
+        CS->>CS: 信頼度計算
+        CS->>RSyn: スコア付き主張
+        RSyn->>RSyn: 応答生成
+        RSyn->>U: 検証済み応答
+    else クリエイティブクエリ
+        IC->>RSyn: 直接処理
+        RSyn->>U: クリエイティブ応答
+    end

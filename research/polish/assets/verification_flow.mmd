@@ -1,0 +1,35 @@
+graph TD
+    A[Zapytanie Użytkownika] --> B{Klasyfikacja Intencji}
+    B -->|Faktualne| C[Pętla Weryfikacji]
+    B -->|Kreatywne| D[Bezpośrednia Odpowiedź]
+    C --> E[Ekstrakcja Twierdzeń]
+    E --> F[Skupione Wyszukiwanie]
+    F --> G[Walidacja Krzyżowa]
+    G --> H[Synteza i Cytowanie]
+    H --> I[Zweryfikowana Odpowiedź]
+    
+    subgraph "Pętla Weryfikacji"
+        E
+        F
+        G
+        H
+    end
+    
+    subgraph "Hierarchia Zaufanych Źródeł"
+        J[Poziom 1: Weryfikacja Podstawowa]
+        K[Poziom 2: Rejestry Instytucjonalne]
+        L[Poziom 3: Dziennikarstwo Prestizowe]
+        M[Poziom 4: Tłum/Konsensus]
+    end
+    
+    F --> J
+    F --> K
+    F --> L
+    F --> M
+    
+    style A fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style I fill:#e6f7ff,stroke:#333,stroke-width:2px
+    style J fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style K fill:#fff0e6,stroke:#333,stroke-width:1px
+    style L fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style M fill:#f0f0f0,stroke:#333,stroke-width:1px

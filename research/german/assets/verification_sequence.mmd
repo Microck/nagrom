@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant U as Benutzer
+    participant IC as Intention-Klassifizierer
+    participant CE as Behauptungs-Extraktor
+    participant SS as Quellenselektor
+    participant RS as Suchsystem
+    participant VE as Validierungs-Engine
+    participant CS as Konfidenz-Score
+    participant RSyn as Antwort-Synthesizer
+    
+    U->>IC: Anfrage senden
+    IC->>IC: Intention analysieren
+    alt Faktische Anfrage
+        IC->>CE: Behauptungen extrahieren
+        CE->>SS: Behauptungstypen identifizieren
+        SS->>RS: Quellen auswählen
+        RS->>RS: Parallele Suche
+        RS->>VE: Wiederhergestellte Beweise
+        VE->>VE: Kreuzvalidierung
+        VE->>CS: Validierungsergebnisse
+        CS->>CS: Vertrauen berechnen
+        CS->>RSyn: Bewertete Behauptungen
+        RSyn->>RSyn: Antwort generieren
+        RSyn->>U: Verifizierte Antwort
+    else Kreative Anfrage
+        IC->>RSyn: Direkte Verarbeitung
+        RSyn->>U: Kreative Antwort
+    end

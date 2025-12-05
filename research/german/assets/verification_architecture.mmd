@@ -1,0 +1,41 @@
+graph TD
+    subgraph "Agenten-Verifizierungsarchitektur"
+        A[Benutzeroberflächen-Schicht] --> B[Intention-Klassifizierungs-Modul]
+        B --> C[Behauptungs-Extraktions-Engine]
+        C --> D[Quellenauswahl-Algorithmus]
+        D --> E[Multimodales Suchsystem]
+        E --> F[Kreuzvalidierungs-Engine]
+        F --> G[Konfidenz-Scoring-Modul]
+        G --> H[Antwort-Synthese-Schicht]
+        H --> I[Zitations-Generator]
+        I --> J[Verifizierte Ausgabe]
+    end
+    
+    subgraph "Externe Wissensquellen"
+        K[Stufe 1: Verifizierungs-DBs]
+        L[Stufe 2: Institutionelle Aufzeichnungen]
+        M[Stufe 3: Nachrichtenarchive]
+        N[Stufe 4: Sozialer Kontext]
+    end
+    
+    E --> K
+    E --> L
+    E --> M
+    E --> N
+    
+    subgraph "Modell-Orchestrierung"
+        O[Primäres Reasoning-Modell]
+        P[Spezialisierte Modelle]
+        Q[Validierungsmodelle]
+    end
+    
+    F --> O
+    F --> P
+    F --> Q
+    
+    style A fill:#f0f8ff,stroke:#333,stroke-width:2px
+    style J fill:#e6ffe6,stroke:#333,stroke-width:2px
+    style K fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style L fill:#fff0e6,stroke:#333,stroke-width:1px
+    style M fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style N fill:#f0f0f0,stroke:#333,stroke-width:1px

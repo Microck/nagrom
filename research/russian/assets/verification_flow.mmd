@@ -1,0 +1,35 @@
+graph TD
+    A[Запрос пользователя] --> B{Классификация намерений}
+    B -->|Фактический| C[Цикл проверки]
+    B -->|Креативный| D[Прямой ответ]
+    C --> E[Извлечение утверждений]
+    E --> F[Целенаправленный поиск]
+    F --> G[Кросс-проверка]
+    G --> H[Синтез и цитирование]
+    H --> I[Проверенный ответ]
+    
+    subgraph "Цикл проверки"
+        E
+        F
+        G
+        H
+    end
+    
+    subgraph "Иерархия источников доверия"
+        J[Уровень 1: Первичная проверка]
+        K[Уровень 2: Институциональные записи]
+        L[Уровень 3: Авторитетная журналистика]
+        M[Уровень 4: Толпа/консенсус]
+    end
+    
+    F --> J
+    F --> K
+    F --> L
+    F --> M
+    
+    style A fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style I fill:#e6f7ff,stroke:#333,stroke-width:2px
+    style J fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style K fill:#fff0e6,stroke:#333,stroke-width:1px
+    style L fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style M fill:#f0f0f0,stroke:#333,stroke-width:1px

@@ -1,0 +1,34 @@
+graph TD
+    subgraph "Wielomodalna Pipeline Weryfikacji"
+        A[Zapytanie Wejściowe] --> B[Wykrywanie Modalności]
+        B --> C{Zapytanie Tekstowe?}
+        B --> D{Zapytanie Obrazu?}
+        B --> E{Zapytanie Audio?}
+        B --> F{Zapytanie Wideo?}
+        
+        C --> G[Łańcuch Weryfikacji Tekstu]
+        D --> H[Łańcuch Analizy Wizualnej]
+        E --> I[Łańcuch Przetwarzania Audio]
+        F --> J[Łańcuch Analizy Wideo]
+        
+        G --> K[Synteza Transmodalna]
+        H --> K
+        I --> K
+        J --> K
+        
+        K --> L[Zunifikowany Wynik Weryfikacji]
+    end
+    
+    subgraph "Łańcuch Weryfikacji Tekstu"
+        G --> G1[Dekompozycja Twierdzeń]
+        G1 --> G2[Wyszukiwanie Źródeł]
+        G2 --> G3[Weryfikacja Faktów]
+        G3 --> G4[Generowanie Cytowań]
+    end
+    
+    subgraph "Łańcuch Analizy Wizualnej"
+        H --> H1[Wykrywanie Obiektów]
+        H1 --> H2[Analiza Kontekstu]
+        H2 --> H3[Weryfikacja Metadanych]
+        H3 --> H4[Wizualna Weryfikacja Faktów]
+    end

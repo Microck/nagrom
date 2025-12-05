@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant U as Utente
+    participant IC as Classificatore di Intenti
+    participant CE as Estrattore di Affermazioni
+    participant SS as Selettore di Fonti
+    participant RS as Sistema di Recupero
+    participant VE as Motore di Validazione
+    participant CS as Punteggio di Confidenza
+    participant RSyn as Sintetizzatore di Risposta
+    
+    U->>IC: Invia Query
+    IC->>IC: Analizza Intento
+    alt Query Fattuale
+        IC->>CE: Estrai Affermazioni
+        CE->>SS: Identifica Tipi di Affermazione
+        SS->>RS: Seleziona Fonti
+        RS->>RS: Recupero Parallelo
+        RS->>VE: Evidenza Recuperata
+        VE->>VE: Convalida Incrociata
+        VE->>CS: Risultati di Convalida
+        CS->>CS: Calcola Confidenza
+        CS->>RSyn: Affermazioni Punteggiate
+        RSyn->>RSyn: Genera Risposta
+        RSyn->>U: Risposta Verificata
+    else Query Creativa
+        IC->>RSyn: Elaborazione Diretta
+        RSyn->>U: Risposta Creativa
+    end

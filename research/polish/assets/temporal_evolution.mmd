@@ -1,0 +1,41 @@
+graph LR
+    subgraph "Czasowa Ewolucja Wiedzy"
+        A[Statyczna Baza Wiedzy] --> B[Luka Czasowa]
+        B --> C[Wymagana Dynamiczna Weryfikacja]
+    end
+    
+    subgraph "Metryki Wydajności Modelu"
+        D[Wynik Dokładności]
+        E[Opóźnienie (ms)]
+        F[Koszt na Zapytanie]
+        G[Współczynnik Halucynacji]
+        H[Wykorzystanie Kontekstu]
+    end
+    
+    subgraph "Strategie Weryfikacji"
+        I[Natywne Kotwiczenie]
+        J[Zarządzane Wyszukiwanie]
+        K[Metoda Hybrydowa]
+    end
+    
+    C --> I
+    C --> J
+    C --> K
+    
+    I --> D
+    I --> E
+    I --> F
+    I --> G
+    I --> H
+    
+    J --> D
+    J --> E
+    J --> F
+    J --> G
+    J --> H
+    
+    K --> D
+    K --> E
+    K --> F
+    K --> G
+    K --> H

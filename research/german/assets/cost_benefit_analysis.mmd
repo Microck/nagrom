@@ -1,0 +1,35 @@
+graph LR
+    subgraph "Kosten-Nutzen-Analyse"
+        A[Verifizierungsmethode] --> B[Genauigkeitsgewinn]
+        A --> C[Auswirkung auf Latenz]
+        A --> D[Kostenfaktor]
+        A --> E[Skalierbarkeit]
+    end
+    
+    subgraph "Methodenvergleich"
+        F[Einzelquellen-RAG]
+        G[Mehrquellen-RAG]
+        H[DebateCV-Framework]
+        I[SAFE-Protokoll]
+        J[Hybrider Ansatz]
+    end
+    
+    F --> A
+    G --> A
+    H --> A
+    I --> A
+    J --> A
+    
+    subgraph "Performance-Metriken"
+        K[Genauigkeit: 65-75 %]
+        L[Genauigkeit: 75-85 %]
+        M[Genauigkeit: 85-92 %]
+        N[Genauigkeit: 88-94 %]
+        O[Genauigkeit: 90-96 %]
+    end
+    
+    F --> K
+    G --> L
+    H --> M
+    I --> N
+    J --> O

@@ -1,0 +1,34 @@
+graph TD
+    subgraph "Pipeline de Verificación Multimodal"
+        A[Consulta de Entrada] --> B[Detección de Modalidad]
+        B --> C{¿Consulta de Texto?}
+        B --> D{¿Consulta de Imagen?}
+        B --> E{¿Consulta de Audio?}
+        B --> F{¿Consulta de Vídeo?}
+        
+        C --> G[Cadena de Verificación de Texto]
+        D --> H[Cadena de Análisis Visual]
+        E --> I[Cadena de Procesamiento de Audio]
+        F --> J[Cadena de Análisis de Vídeo]
+        
+        G --> K[Síntesis Transmodal]
+        H --> K
+        I --> K
+        J --> K
+        
+        K --> L[Resultado de Verificación Unificado]
+    end
+    
+    subgraph "Cadena de Verificación de Texto"
+        G --> G1[Descomposición de Afirmaciones]
+        G1 --> G2[Recuperación de Fuentes]
+        G2 --> G3[Validación de Hechos]
+        G3 --> G4[Generación de Citas]
+    end
+    
+    subgraph "Cadena de Análisis Visual"
+        H --> H1[Detección de Objetos]
+        H1 --> H2[Análisis de Contexto]
+        H2 --> H3[Verificación de Metadatos]
+        H3 --> H4[Verificación Visual de Hechos]
+    end

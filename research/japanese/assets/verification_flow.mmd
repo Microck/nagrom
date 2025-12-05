@@ -1,0 +1,35 @@
+graph TD
+    A[ユーザーの問い合わせ] --> B{意図分類}
+    B -->|事実系| C[検証ループ]
+    B -->|クリエイティブ系| D[直接回答]
+    C --> E[主張抽出]
+    E --> F[焦点検索]
+    F --> G[クロス検証]
+    G --> H[統合と引用]
+    H --> I[検証済み回答]
+    
+    subgraph "検証ループ"
+        E
+        F
+        G
+        H
+    end
+    
+    subgraph "信頼ソース階層"
+        J[レベル1: 一次検証]
+        K[レベル2: 公的記録]
+        L[レベル3: 権威ある報道]
+        M[レベル4: 集合知/コンセンサス]
+    end
+    
+    F --> J
+    F --> K
+    F --> L
+    F --> M
+    
+    style A fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style I fill:#e6f7ff,stroke:#333,stroke-width:2px
+    style J fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style K fill:#fff0e6,stroke:#333,stroke-width:1px
+    style L fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style M fill:#f0f0f0,stroke:#333,stroke-width:1px

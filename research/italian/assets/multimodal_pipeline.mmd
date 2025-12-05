@@ -1,0 +1,34 @@
+graph TD
+    subgraph "Pipeline di Verifica Multimodale"
+        A[Query in Ingresso] --> B[Rilevamento Modalità]
+        B --> C{Query di Testo?}
+        B --> D{Query di Immagine?}
+        B --> E{Query Audio?}
+        B --> F{Query Video?}
+        
+        C --> G[Catena di Verifica Testuale]
+        D --> H[Catena di Analisi Visiva]
+        E --> I[Catena di Elaborazione Audio]
+        F --> J[Catena di Analisi Video]
+        
+        G --> K[Sintesi Transmodale]
+        H --> K
+        I --> K
+        J --> K
+        
+        K --> L[Risultato di Verifica Unificato]
+    end
+    
+    subgraph "Catena di Verifica Testuale"
+        G --> G1[Decomposizione Affermazioni]
+        G1 --> G2[Recupero Fonti]
+        G2 --> G3[Validazione Fatti]
+        G3 --> G4[Generazione Citazioni]
+    end
+    
+    subgraph "Catena di Analisi Visiva"
+        H --> H1[Rilevamento Oggetti]
+        H1 --> H2[Analisi Contesto]
+        H2 --> H3[Validazione Metadati]
+        H3 --> H4[Verifica Visiva dei Fatti]
+    end

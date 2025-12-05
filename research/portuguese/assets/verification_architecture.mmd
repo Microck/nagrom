@@ -1,0 +1,41 @@
+graph TD
+    subgraph "Arquitectura de Verificação Agente"
+        A[Camada de Interface do Utilizador] --> B[Módulo de Classificação de Intenção]
+        B --> C[Motor de Extração de Afirmações]
+        C --> D[Algoritmo de Selecção de Fontes]
+        D --> E[Sistema de Recuperação Multimodal]
+        E --> F[Motor de Validação Cruzada]
+        F --> G[Módulo de Pontuação de Confiança]
+        G --> H[Camada de Síntese de Resposta]
+        H --> I[Gerador de Citações]
+        I --> J[Saída Verificada]
+    end
+    
+    subgraph "Fontes de Conhecimento Externas"
+        K[Nível 1: BDs de Verificação]
+        L[Nível 2: Registos Institucionais]
+        M[Nível 3: Arquivos de Notícias]
+        N[Nível 4: Contexto Social]
+    end
+    
+    E --> K
+    E --> L
+    E --> M
+    E --> N
+    
+    subgraph "Orquestração de Modelos"
+        O[Modelo de Raciocínio Primário]
+        P[Modelos Especialistas]
+        Q[Modelos de Validação]
+    end
+    
+    F --> O
+    F --> P
+    F --> Q
+    
+    style A fill:#f0f8ff,stroke:#333,stroke-width:2px
+    style J fill:#e6ffe6,stroke:#333,stroke-width:2px
+    style K fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style L fill:#fff0e6,stroke:#333,stroke-width:1px
+    style M fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style N fill:#f0f0f0,stroke:#333,stroke-width:1px

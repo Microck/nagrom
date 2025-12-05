@@ -1,0 +1,34 @@
+graph TD
+    subgraph "Multimodale Verifizierungspipeline"
+        A[Eingehende Anfrage] --> B[Modalitätserkennung]
+        B --> C{Text-Anfrage?}
+        B --> D{Bild-Anfrage?}
+        B --> E{Audio-Anfrage?}
+        B --> F{Video-Anfrage?}
+        
+        C --> G[Text-Verifizierungskette]
+        D --> H[Visuelle Analysekette]
+        E --> I[Audio-Verarbeitungskette]
+        F --> J[Video-Analyse-Kette]
+        
+        G --> K[Transmodale Synthese]
+        H --> K
+        I --> K
+        J --> K
+        
+        K --> L[Vereinheitliches Verifizierungsergebnis]
+    end
+    
+    subgraph "Text-Verifizierungskette"
+        G --> G1[Behauptungszerlegung]
+        G1 --> G2[Quellensuche]
+        G2 --> G3[Faktenprüfung]
+        G3 --> G4[Zitiergenerierung]
+    end
+    
+    subgraph "Visuelle Analysekette"
+        H --> H1[Objekterkennung]
+        H1 --> H2[Kontextanalyse]
+        H2 --> H3[Metadaten-Prüfung]
+        H3 --> H4[Visuelle Faktenprüfung]
+    end

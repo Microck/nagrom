@@ -1,10 +1,12 @@
 \documentclass[conference]{IEEEtran}
 \usepackage{caption}
-\captionsetup{compatibility=false}
+\captionsetup{compatibility=false, font=footnotesize, labelfont=bf}
+\captionsetup[figure]{font=footnotesize}
+\captionsetup[table]{font=footnotesize}
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{graphicx}
-\usepackage{cite}
+\usepackage[superscript]{cite}
 \usepackage{algorithm}
 \usepackage{algorithmic}
 \usepackage{hyperref}
@@ -15,6 +17,8 @@
 \usepackage{ragged2e}
 \usepackage{hyphenat}
 \usepackage{varwidth}
+\usepackage{float}
+
 \setlength{\emergencystretch}{1em}
 \sloppy
 
@@ -22,11 +26,14 @@
 
 \begin{document}
 
-\title{The Epistemology of Agentic Intelligence: Architectures, Verification Protocols, and the Gemini 2.5 Paradigm in Late 2025}
+\title{The Epistemology of Agentic Intelligence: Source Hierarchies and Protocol-Level Fact Verification in Large Language Models}
 
 \author{
-\IEEEauthorblockN{by 5 aka M.J.}
-\IEEEauthorblockA{Email: contact@micr.dev}\\
+\IEEEauthorblockN{By 5 aka M.J.}
+\IEEEauthorblockA{
+Independent Researcher, 4 Dec 2025\\
+contact@micr.dev\\
+}
 }
 
 \maketitle
@@ -44,19 +51,22 @@ Agentic Intelligence, Fact-Checking, Large Language Models, Verification Protoco
 
 The artificial intelligence landscape of 2025 represents a fundamental shift from the generative paradigms of the early 2020s toward a more sophisticated ecosystem where verification and reasoning capabilities have become paramount. The unprecedented proliferation of Large Language Models (LLMs) has fundamentally altered the economics of content creation, reducing the marginal cost of generating persuasive text to near zero. This technological advancement, while remarkable, has simultaneously created an epistemological crisis where the traditional boundaries between fact and fiction are increasingly blurred.
 
-The persistent challenge of the ``Knowledge Cutoff'' remains the single most significant bottleneck in LLM utility. Despite the release of massive architectures like Meta's Llama 4 Maverick 1 and Google's highly efficient Gemini 2.5 Flash 2, the fundamental limitation persists: a model's weights are static representations of the past. By December 2025, even the most recently trained models contain information cutoffs ranging from August 2024 to January 2025, creating a temporal gap that renders them incapable of addressing current events, recent scientific discoveries, or evolving geopolitical situations.
+The persistent challenge of the ``Knowledge Cutoff'' remains the single most significant bottleneck in LLM utility. Despite the release of massive architectures like Meta's Llama 4 Maverick \cite{ref1} and Google's highly efficient Gemini 2.5 Flash \cite{ref2}, the fundamental limitation persists: a model's weights are static representations of the past. By December 2025, even the most recently trained models contain information cutoffs ranging from August 2024 to January 2025, creating a temporal gap that renders them incapable of addressing current events, recent scientific discoveries, or evolving geopolitical situations.
 
-\begin{figure}[htbp]
+
+The assumption that an AI should inherently browse the internet is architecturally distinct from the capability of a neural network to reason. Browsing represents an agentic behavior---a tool-use pattern---rather than a cognitive function. As of late 2025, the industry has bifurcated into two primary approaches to address this limitation: (1) Native Grounding, as exemplified by Google's Vertex AI ecosystem where Gemini 2.5 Flash interacts directly with Google Search \cite{ref3}, and (2) Orchestrated Retrieval, implemented through services like Perplexity Sonar \cite{ref4} or user-defined ``Master Prompts'' that compel models to query external indices.
+
+\begin{figure}[h]
 \centering
+\vspace{-0.3em}
 \includegraphics[width=\columnwidth]{verification_flow.png}
 \caption{The verification protocol flowchart showing the process from user query to verified response.}
 \label{fig:verification_flow}
 \end{figure}
 
-The assumption that an AI should inherently browse the internet is architecturally distinct from the capability of a neural network to reason. Browsing represents an agentic behavior---a tool-use pattern---rather than a cognitive function. As of late 2025, the industry has bifurcated into two primary approaches to address this limitation: (1) Native Grounding, as exemplified by Google's Vertex AI ecosystem where Gemini 2.5 Flash interacts directly with Google Search 3, and (2) Orchestrated Retrieval, implemented through services like Perplexity Sonar 5 or user-defined ``Master Prompts'' that compel models to query external indices.
-
 In this paper, I present a comprehensive analysis of the state of AI fact-checking and model capabilities as of late 2025. I dissect the technical specifications of the Gemini 2.5 and Llama 4 families, evaluate the economic and latency implications of forcing models to check multiple websites, and propose a definitive protocol for high-fidelity verification prompts. My analysis draws upon extensive release logs, benchmark data, and developer discourse to construct a complete picture of why ``updated information'' remains a challenge and how the ``Master Prompt'' intervention serves as the critical bridge to reliability.
 
+\break
 The contributions of my work are threefold:
 \begin{enumerate}
 \item A comprehensive architectural analysis of leading AI models and their verification capabilities.
@@ -130,18 +140,15 @@ By November 2025, evaluations of SAFE agents demonstrated that they could agree 
 The limitation of ``context'' has largely been solved in late 2025. Models like Google's Gemini 2.0 Flash and Llama 3.3 boast context windows ranging from 128,000 to over 1 million tokens. This capacity transforms fact-checking from a ``search'' problem to a ``reading'' problem. Instead of relying on a search engine to find a snippet of a document, the entire corpus can be loaded into the model's working memory.
 
 Hybrid architectures combining Transformer and Mamba components have emerged as particularly effective for verification tasks. Transformers excel at high-accuracy reasoning and attending to specific details within a text, while Mamba (State Space Models) excel at processing massive sequences of data with linear complexity.
+\break
 
 \section{System Architecture}
 \label{sec:architecture}
 
+
+
 My proposed verification architecture consists of multiple interconnected components designed to ensure comprehensive and accurate fact-checking. The system employs a hierarchical approach to source credibility and utilizes multiple specialized models for different aspects of verification.
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\columnwidth]{verification_architecture.png}
-\caption{The complete agentic verification architecture showing all components and their interactions.}
-\label{fig:verification_architecture}
-\end{figure}
 
 \subsection{Overall Architecture}
 
@@ -155,6 +162,13 @@ The verification system I designed is composed of seven main layers:
 \item \textbf{Cross-Validation Engine}: Validates claims across multiple sources.
 \item \textbf{Response Synthesis Layer}: Generates verified responses with citations.
 \end{enumerate}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\columnwidth]{verification_architecture.png}
+\caption{The complete agentic verification architecture showing all components and their interactions.}
+\label{fig:verification_architecture}
+\end{figure}
 
 \subsection{Source Credibility Hierarchy}
 
@@ -286,12 +300,7 @@ Response Synthesis & Llama 3.3 70B & 0.3 & 0.85 \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
-\centering
-\includegraphics[width=\columnwidth]{model_comparison.png}
-\caption{Comparison of key models for verification workflows across multiple metrics.}
-\label{fig:model_comparison}
-\end{figure}
+
 
 \section{Experiments}
 \label{sec:experiments}
@@ -322,6 +331,13 @@ I employed the following metrics:
 \item \textbf{Cost}: Monetary cost per 1,000 verifications.
 \end{itemize}
 
+\begin{figure}[htbp]
+\centering
+\includegraphics[width=\columnwidth]{model_comparison.png}
+\caption{Comparison of key models for verification workflows across multiple metrics.}
+\label{fig:model_comparison}
+\end{figure}
+
 \subsection{Comparative Analysis}
 
 I compared my approach against several baseline methods:
@@ -332,8 +348,8 @@ I compared my approach against several baseline methods:
 \item \textbf{SAFE}: Search-augmented factuality evaluator.
 \item \textbf{My Method}: Master Prompt with hierarchical verification.
 \end{enumerate}
-
-\begin{table}[htbp]
+\break
+\begin{table}[h]
 \centering
 \caption{Performance Comparison Across Methods}
 \label{tab:performance}
@@ -350,24 +366,30 @@ SAFE & 88.9\% & 90.1\% & 87.8\% & 88.9\% & 2.1 \\
 \end{tabular}
 \end{table}
 
-\begin{figure}[htbp]
+\noindent\begin{minipage}{\columnwidth}
+Across all baselines, the proposed method attains the highest accuracy and F1-score while keeping latency in the same range as other multi-source approaches. A cost–benefit comparison along the axes of accuracy, latency, and monetary cost further highlights the advantage of the hierarchy-aware verification.
+\end{minipage}
+
+\begin{figure}[h]
 \centering
-\includegraphics[width=\columnwidth]{cost_benefit_analysis.png}
+\vspace{-0.5em}
+\includegraphics[width=0.9\columnwidth]{cost_benefit_analysis.png}
 \caption{Cost-benefit analysis of different verification methods across accuracy, latency, and cost metrics.}
 \label{fig:cost_benefit}
 \end{figure}
 
+
 \subsection{Ablation Studies}
 
-I conducted ablation studies to understand the contribution of each component:
+I conducted ablation studies to understand the contribution of each component.
 
-\subsubsection{Source Hierarchy Impact}
+\noindent\textit{\hspace{1em}1) Source Hierarchy Impact:}
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Impact of Source Hierarchy on Accuracy}
 \label{tab:hierarchy}
-\begin{tabular}{lc}
+\begin{tabular}{lr}
 \toprule
 \textbf{Source Configuration} & \textbf{Accuracy} \\
 \midrule
@@ -379,10 +401,10 @@ All Tiers & 93.8\% \\
 \bottomrule
 \end{tabular}
 \end{table}
+\break
+\noindent\textit{\hspace{1em}2) Number of Sources Impact:}
 
-\subsubsection{Number of Sources Impact}
-
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Impact of Number of Sources on Performance}
 \label{tab:num_sources}
@@ -403,7 +425,7 @@ All Tiers & 93.8\% \\
 
 I analyzed the types of errors encountered by my system:
 
-\begin{table}[htbp]
+\begin{table}[H]
 \centering
 \caption{Error Type Distribution}
 \label{tab:errors}
@@ -426,7 +448,7 @@ Other & 5.3\% \\
 
 My experimental results demonstrate the effectiveness of the proposed verification architecture. Several key insights emerge from my analysis.
 
-\begin{figure}[htbp]
+\begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{verification_sequence.png}
 \caption{Sequence diagram illustrating the complete verification process from user query to response.}
@@ -475,17 +497,18 @@ Future work should focus on:
 \item Expanding the system to handle more languages and cultural contexts.
 \end{enumerate}
 
-\section{Conclusion}
-\label{sec:conclusion}
-
-In this paper, I present a comprehensive analysis of AI fact-checking and verification architectures in late 2025. My research demonstrates that while modern LLMs possess sophisticated reasoning capabilities, they require external verification mechanisms to ensure factual accuracy.
-
-\begin{figure}[htbp]
+\begin{figure}[h]
 \centering
 \includegraphics[width=\columnwidth]{temporal_evolution.png}
 \caption{Temporal knowledge evolution and its impact on verification strategies.}
 \label{fig:temporal_evolution}
 \end{figure}
+
+\section{Conclusion}
+\label{sec:conclusion}
+
+In this paper, I present a comprehensive analysis of AI fact-checking and verification architectures in late 2025. My research demonstrates that while modern LLMs possess sophisticated reasoning capabilities, they require external verification mechanisms to ensure factual accuracy.
+
 
 The key contributions of my work include:
 \begin{enumerate}

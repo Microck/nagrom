@@ -1,0 +1,35 @@
+graph TD
+    A[用户查询] --> B{意图分类}
+    B -->|事实类| C[验证循环]
+    B -->|创意类| D[直接回答]
+    C --> E[断言抽取]
+    E --> F[聚焦检索]
+    F --> G[交叉验证]
+    G --> H[综合与引用]
+    H --> I[已验证回答]
+    
+    subgraph "验证循环"
+        E
+        F
+        G
+        H
+    end
+    
+    subgraph "信源可信度层级"
+        J[第1级：一手验证]
+        K[第2级：机构记录]
+        L[第3级：权威媒体报道]
+        M[第4级：群体/共识]
+    end
+    
+    F --> J
+    F --> K
+    F --> L
+    F --> M
+    
+    style A fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style I fill:#e6f7ff,stroke:#333,stroke-width:2px
+    style J fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style K fill:#fff0e6,stroke:#333,stroke-width:1px
+    style L fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style M fill:#f0f0f0,stroke:#333,stroke-width:1px

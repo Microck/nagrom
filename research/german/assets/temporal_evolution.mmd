@@ -1,0 +1,41 @@
+graph LR
+    subgraph "Zeitliche Wissensentwicklung"
+        A[Statische Wissensbasis] --> B[Zeitlücke]
+        B --> C[Dynamische Verifizierung erforderlich]
+    end
+    
+    subgraph "Modell-Performance-Metriken"
+        D[Genauigkeits-Score]
+        E[Latenz (ms)]
+        F[Kosten pro Anfrage]
+        G[Halluzinationsrate]
+        H[Kontext-Nutzung]
+    end
+    
+    subgraph "Verifizierungsstrategien"
+        I[Native Verankerung]
+        J[Orchestrierte Suche]
+        K[Hybrider Ansatz]
+    end
+    
+    C --> I
+    C --> J
+    C --> K
+    
+    I --> D
+    I --> E
+    I --> F
+    I --> G
+    I --> H
+    
+    J --> D
+    J --> E
+    J --> F
+    J --> G
+    J --> H
+    
+    K --> D
+    K --> E
+    K --> F
+    K --> G
+    K --> H

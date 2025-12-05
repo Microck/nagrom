@@ -1,0 +1,35 @@
+graph TD
+    A[Consulta del Usuario] --> B{Clasificación de Intención}
+    B -->|Factual| C[Bucle de Verificación]
+    B -->|Creativa| D[Respuesta Directa]
+    C --> E[Extracción de Afirmaciones]
+    E --> F[Recuperación Focalizada]
+    F --> G[Validación Cruzada]
+    G --> H[Síntesis y Citación]
+    H --> I[Respuesta Verificada]
+    
+    subgraph "Bucle de Verificación"
+        E
+        F
+        G
+        H
+    end
+    
+    subgraph "Jerarquía de Fuentes de Confianza"
+        J[Nivel 1: Verificación Primaria]
+        K[Nivel 2: Registro Institucional]
+        L[Nivel 3: Periodismo de Prestigio]
+        M[Nivel 4: Multitud/Consenso]
+    end
+    
+    F --> J
+    F --> K
+    F --> L
+    F --> M
+    
+    style A fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style I fill:#e6f7ff,stroke:#333,stroke-width:2px
+    style J fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style K fill:#fff0e6,stroke:#333,stroke-width:1px
+    style L fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style M fill:#f0f0f0,stroke:#333,stroke-width:1px

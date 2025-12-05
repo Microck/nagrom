@@ -1,0 +1,41 @@
+graph LR
+    subgraph "Evoluzione Temporale della Conoscenza"
+        A[Base di Conoscenza Statica] --> B[Divario Temporale]
+        B --> C[Verifica Dinamica Richiesta]
+    end
+    
+    subgraph "Metriche di Performance del Modello"
+        D[Punteggio di Precisione]
+        E[Latenza (ms)]
+        F[Costo per Query]
+        G[Tasso di Allucinazione]
+        H[Utilizzo del Contesto]
+    end
+    
+    subgraph "Strategie di Verifica"
+        I[Ancoraggio Nativo]
+        J[Recupero Orchestrato]
+        K[Approccio Ibrido]
+    end
+    
+    C --> I
+    C --> J
+    C --> K
+    
+    I --> D
+    I --> E
+    I --> F
+    I --> G
+    I --> H
+    
+    J --> D
+    J --> E
+    J --> F
+    J --> G
+    J --> H
+    
+    K --> D
+    K --> E
+    K --> F
+    K --> G
+    K --> H

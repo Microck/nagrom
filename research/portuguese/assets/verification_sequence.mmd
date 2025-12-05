@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant U as Utilizador
+    participant IC as Classificador de Intenção
+    participant CE as Extractor de Afirmações
+    participant SS as Selector de Fontes
+    participant RS as Sistema de Recuperação
+    participant VE as Motor de Validação
+    participant CS as Score de Confiança
+    participant RSyn as Sintetizador de Resposta
+    
+    U->>IC: Enviar Consulta
+    IC->>IC: Analisar Intenção
+    alt Consulta Factual
+        IC->>CE: Extrair Afirmações
+        CE->>SS: Identificar Tipos de Afirmação
+        SS->>RS: Seleccionar Fontes
+        RS->>RS: Recuperação Paralela
+        RS->>VE: Evidência Recuperada
+        VE->>VE: Validação Cruzada
+        VE->>CS: Resultados de Validação
+        CS->>CS: Calcular Confiança
+        CS->>RSyn: Afirmações Pontuadas
+        RSyn->>RSyn: Gerar Resposta
+        RSyn->>U: Resposta Verificada
+    else Consulta Criativa
+        IC->>RSyn: Processamento Directo
+        RSyn->>U: Resposta Criativa
+    end

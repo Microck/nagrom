@@ -1,0 +1,35 @@
+graph TD
+    A[Query Utente] --> B{Classificazione Intento}
+    B -->|Fattuale| C[Ciclo di Verifica]
+    B -->|Creativa| D[Risposta Diretta]
+    C --> E[Estrazione Affermazioni]
+    E --> F[Recupero Focalizzato]
+    F --> G[Convalida Incrociata]
+    G --> H[Sintesi e Citazione]
+    H --> I[Risposta Verificata]
+    
+    subgraph "Ciclo di Verifica"
+        E
+        F
+        G
+        H
+    end
+    
+    subgraph "Gerarchia Fonti Affidabili"
+        J[Livello 1: Verifica Primaria]
+        K[Livello 2: Registri Istituzionali]
+        L[Livello 3: Giornalismo Autorevole]
+        M[Livello 4: Folla/Consenso]
+    end
+    
+    F --> J
+    F --> K
+    F --> L
+    F --> M
+    
+    style A fill:#f9f9f9,stroke:#333,stroke-width:2px
+    style I fill:#e6f7ff,stroke:#333,stroke-width:2px
+    style J fill:#ffe6e6,stroke:#333,stroke-width:1px
+    style K fill:#fff0e6,stroke:#333,stroke-width:1px
+    style L fill:#e6ffe6,stroke:#333,stroke-width:1px
+    style M fill:#f0f0f0,stroke:#333,stroke-width:1px

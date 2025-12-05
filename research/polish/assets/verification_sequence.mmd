@@ -1,0 +1,28 @@
+sequenceDiagram
+    participant U as Użytkownik
+    participant IC as Klasyfikator Intencji
+    participant CE as Ekstraktor Twierdzeń
+    participant SS as Selektor Źródeł
+    participant RS as System Wyszukiwania
+    participant VE as Silnik Walidacji
+    participant CS as Wynik Pewności
+    participant RSyn as Syntezator Odpowiedzi
+    
+    U->>IC: Wyślij Zapytanie
+    IC->>IC: Analizuj Intencję
+    alt Zapytanie Faktualne
+        IC->>CE: Wyodrębnij Twierdzenia
+        CE->>SS: Zidentyfikuj Typy Twierdzeń
+        SS->>RS: Wybierz Źródła
+        RS->>RS: Wyszukiwanie Równoległe
+        RS->>VE: Odzyskane Dowody
+        VE->>VE: Walidacja Krzyżowa
+        VE->>CS: Wyniki Walidacji
+        CS->>CS: Oblicz Pewność
+        CS->>RSyn: Ocenione Twierdzenia
+        RSyn->>RSyn: Generuj Odpowiedź
+        RSyn->>U: Zweryfikowana Odpowiedź
+    else Zapytanie Kreatywne
+        IC->>RSyn: Bezpośrednia Obsługa
+        RSyn->>U: Kreatywna Odpowiedź
+    end

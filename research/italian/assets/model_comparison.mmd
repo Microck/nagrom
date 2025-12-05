@@ -1,0 +1,44 @@
+graph LR
+    subgraph "Confronto Architettura Modelli"
+        A[Gemini 2.5 Flash]
+        B[Llama 4 Maverick]
+        C[Qwen 2.5 72B]
+        D[DeepSeek V3]
+    end
+    
+    subgraph "Metriche Chiave"
+        E[Follow-up Istruzioni]
+        F[Capacità Contesto]
+        G[Precisione Verifica]
+        H[Latenza]
+        I[Efficienza Costi]
+    end
+    
+    A --> E
+    A --> F
+    A --> G
+    A --> H
+    A --> I
+    
+    B --> E
+    B --> F
+    B --> G
+    B --> H
+    B --> I
+    
+    C --> E
+    C --> F
+    C --> G
+    C --> H
+    C --> I
+    
+    D --> E
+    D --> F
+    D --> G
+    D --> H
+    D --> I
+    
+    style A fill:#e6f7ff,stroke:#333,stroke-width:2px
+    style B fill:#ffe6e6,stroke:#333,stroke-width:2px
+    style C fill:#e6ffe6,stroke:#333,stroke-width:2px
+    style D fill:#fff0e6,stroke:#333,stroke-width:2px
