@@ -1,6 +1,6 @@
 import asyncio
 import logging
-from .bot import AVABot
+from .bot import NagromBot
 from .config_manager import BotConfig
 
 logging.basicConfig(level=logging.INFO)
@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.INFO)
 async def main():
     try:
         config = BotConfig.load()
-        bot = AVABot(config)
+        bot = NagromBot(config)
         async with bot:
             await bot.start(config.discord.token)
     except FileNotFoundError:

@@ -12,7 +12,14 @@ llm:
   max_tokens: 500
 
 database:
-  url: "sqlite+aiosqlite:///data/ava.db"
+  url: "sqlite+aiosqlite:///data/nagrom.db"
+
+search:
+  enabled: false
+  duckduckgo_enabled: true
+  tavily_api_key: ""
+  tavily_max_results: 5
+  default_provider: "auto"
 
 rate_limits:
   user_cooldown: 30

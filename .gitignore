@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python/
+env/
+.env
+.venv/
+venv/
+pip-wheel-metadata/
+
+# Editor-specific (optional)
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Gemini CLI
+.gemini_security/

@@ -57,25 +57,11 @@ class WebhookManager:
         channel: discord.abc.Messageable,
         embed: discord.Embed,
         content: Optional[str] = None,
+        file: Optional[discord.File] = None,
     ) -> Optional[discord.Message]:
-        # Prefer channel webhook for guild text channels
-        if isinstance(channel, discord.TextChannel):
-            hook = await self._get_or_create_channel_webhook(channel)
-            if hook is not None:
-                try:
-                    message = await hook.send(
-                        content=content or None,
-                        embed=embed,
-                        wait=True,
-                        username="AVA",
-                    )
-                    return message
-                except Exception:
-                    # Fallback to normal send below
-                    pass
-
+        # Always send directly as the bot, per user request
         try:
-            message = await channel.send(content=content or None, embed=embed)
+            message = await channel.send(content=content or None, embed=embed, file=file)
             return message
         except Exception:
             return None

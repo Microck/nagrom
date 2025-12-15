@@ -1,30 +1,36 @@
 from __future__ import annotations
 
-import json
 import logging
 import time
-from typing import Any, Dict
+from typing import List, Optional
 
 import google.generativeai as genai
-# Import types for safety and tools
 from google.generativeai.types import HarmCategory, HarmBlockThreshold
-from google.ai.generativelanguage_v1beta.types import content as content_types
 
-from .provider import LLMProvider
+from .provider import LLMProvider, SourceLockedProviderMixin
+from .search_provider import SearchManager, SearchResult
 from ..config_manager import LLMConfig
-from ..models.verification import VerificationResult
+from ..models.verification import VerificationResult, Source
 
 logger = logging.getLogger(__name__)
 
-class GoogleAIStudioProvider(LLMProvider):
-    def __init__(self, config: LLMConfig, system_prompt_path: str):
+
+class GoogleAIStudioProvider(SourceLockedProviderMixin, LLMProvider):
+    
+    def __init__(self, config: LLMConfig, system_prompt_path: str, search_manager: Optional[SearchManager] = None):
         self.config = config
+        self.search_manager = search_manager
         with open(system_prompt_path, "r", encoding="utf-8") as f:
             self.system_prompt = f.read()
         
-        genai.configure(api_key=config.api_key)
+        configure_kwargs = {"api_key": config.api_key}
+        if config.base_url:
+            configure_kwargs["client_options"] = {"api_endpoint": config.base_url}
+            configure_kwargs["transport"] = "rest"
+            logger.info(f"Using custom Google AI Studio endpoint: {config.base_url}")
         
-        # 1. Safety Settings (Permissive for fact-checking)
+        genai.configure(**configure_kwargs)
+        
         self.safety_settings = {
             HarmCategory.HARM_CATEGORY_HARASSMENT: HarmBlockThreshold.BLOCK_NONE,
             HarmCategory.HARM_CATEGORY_HATE_SPEECH: HarmBlockThreshold.BLOCK_NONE,
@@ -32,16 +38,8 @@ class GoogleAIStudioProvider(LLMProvider):
             HarmCategory.HARM_CATEGORY_DANGEROUS_CONTENT: HarmBlockThreshold.BLOCK_NONE,
         }
 
-        # 2. ENABLE SEARCH (The Fix)
-        # We use the explicit dictionary key 'google_search_retrieval'
-        # which maps correctly in the Python SDK.
-        tools = [
-            {"google_search_retrieval": {}}
-        ]
-
         self.model = genai.GenerativeModel(
             model_name=config.model,
-            tools=tools,
             generation_config={
                 "temperature": config.temperature,
                 "max_output_tokens": config.max_tokens,
@@ -51,15 +49,23 @@ class GoogleAIStudioProvider(LLMProvider):
         )
 
     async def analyze_text(self, text: str) -> VerificationResult:
+        logger.info(f"GoogleAIStudioProvider analyzing: {text[:50]}...")
+        
+        search_results = await self._get_search_results(text)
+        sources = self._build_sources_list(search_results)
+        
+        if not sources:
+            logger.warning("No search results, returning UNVERIFIABLE")
+            return self._create_no_sources_result(text)
+        
+        user_prompt = self._build_stateless_prompt(text, sources)
+        full_prompt = f"{self.system_prompt}\n\n{user_prompt}"
+        
         start = time.perf_counter()
         
         try:
-            full_prompt = f"{self.system_prompt}\n\nUser input: {text}"
-            
-            # Generate content
             response = await self.model.generate_content_async(full_prompt)
             
-            # Handle blocked/empty responses
             if not response.parts:
                 finish_reason = "UNKNOWN"
                 if response.candidates:
@@ -71,47 +77,28 @@ class GoogleAIStudioProvider(LLMProvider):
                     verdict="UNVERIFIABLE",
                     confidence=0.0,
                     reasoning=f"Content blocked or empty (Reason: {finish_reason}).",
-                    sources=[]
+                    sources=sources,
+                    model_name=self.config.model,
                 )
 
-            # Extract text
             content = response.text
+            parsed = self._parse_llm_response(content, text)
+            result = self._validate_and_finalize(parsed, text, sources)
             
-            # Parse JSON
-            try:
-                parsed = json.loads(content)
-            except json.JSONDecodeError:
-                start_idx = content.find('{')
-                end_idx = content.rfind('}') + 1
-                if start_idx != -1 and end_idx > start_idx:
-                    parsed = json.loads(content[start_idx:end_idx])
-                else:
-                    raise ValueError("Could not parse JSON from response")
+            if response.usage_metadata:
+                result.usage = {
+                    "input_tokens": response.usage_metadata.prompt_token_count,
+                    "output_tokens": response.usage_metadata.candidates_token_count
+                }
             
-            # Data Normalization
-            if "verdict" in parsed and isinstance(parsed["verdict"], str):
-                parsed["verdict"] = parsed["verdict"].upper()
-            if "statement" not in parsed:
-                parsed["statement"] = text[:500]
-
-            result = VerificationResult(**parsed)
             latency = time.perf_counter() - start
-            
             logger.info(
-                "Google AI Studio success in %.3fs | verdict=%s conf=%.3f",
-                latency,
-                result.verdict,
-                result.confidence,
+                "Google AI Studio success in %.3fs | verdict=%s conf=%.3f valid=%s",
+                latency, result.verdict, result.confidence, result.validation_passed
             )
             return result
             
         except Exception as exc:
             latency = time.perf_counter() - start
             logger.exception("Google AI Studio exception after %.3fs: %s", latency, exc)
-            return VerificationResult(
-                statement=text[:500],
-                verdict="UNVERIFIABLE",
-                confidence=0.0,
-                reasoning=f"Internal error: {str(exc)}",
-                sources=[],
-            )
+            return self._create_error_result(text, str(exc), sources)

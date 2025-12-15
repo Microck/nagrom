@@ -3,11 +3,11 @@ from __future__ import annotations
 import discord
 from discord.ext import commands
 
-from ..bot import AVABot
+from ..bot import NagromBot
 
 
 class MessageListener(commands.Cog):
-    def __init__(self, bot: AVABot):
+    def __init__(self, bot: NagromBot):
         self.bot = bot
 
     async def _queue_fact_check_for_message(
@@ -34,6 +34,18 @@ class MessageListener(commands.Cog):
                 pass
             return
 
+        # Send loading placeholder
+        loading_embed = discord.Embed(
+            description="Searching sources and analyzing...",
+            color=discord.Color.blue()
+        )
+        loading_embed.set_footer(text="This may take a moment.")
+        
+        try:
+            placeholder_msg = await trigger_message.reply(embed=loading_embed, mention_author=False)
+        except Exception:
+            return
+
         ok, queue_reason = await self.bot.submit_fact_check(
             guild_id=guild_id,
             channel_id=channel_id,
@@ -42,19 +54,13 @@ class MessageListener(commands.Cog):
             statement_author_id=statement_author.id,
             input_text=statement_text,
             trigger_type=trigger_type,  # type: ignore[arg-type]
+            placeholder_message_id=placeholder_msg.id
         )
         if not ok:
             try:
-                await trigger_message.reply(
-                    queue_reason, mention_author=False
-                )
+                await placeholder_msg.edit(content=queue_reason, embed=None)
             except Exception:
                 pass
-            return
-
-        try:
-            await trigger_message.add_reaction("🧪")
-        except Exception:
             return
 
     @commands.Cog.listener()
@@ -80,6 +86,17 @@ class MessageListener(commands.Cog):
                 return
 
             text_to_check = ref_msg.content[:500]
+            
+            match = re.search(r'context\s*(\d+)', message.content, re.IGNORECASE)
+            if match:
+                try:
+                    limit = min(int(match.group(1)), 10)
+                    history = [msg async for msg in message.channel.history(limit=limit, before=ref_msg)]
+                    context_text = "\n".join([f"{m.author.name}: {m.content}" for m in reversed(history)])
+                    text_to_check = f"{context_text}\n{ref_msg.author.name}: {ref_msg.content}\n\nTarget Claim: {text_to_check}"
+                except Exception:
+                    pass
+
             await self._queue_fact_check_for_message(
                 trigger_message=message,
                 statement_text=text_to_check,
@@ -99,6 +116,81 @@ class MessageListener(commands.Cog):
                 return
 
             text_to_check = content[:500]
+            
+            match = re.search(r'last\s*(\d+)', content, re.IGNORECASE)
+            if match:
+                try:
+                    limit = min(int(match.group(1)), 10)
+                    history = [msg async for msg in message.channel.history(limit=limit, before=message)]
+                    if history:
+                        combined = "\n".join([f"{m.author.name}: {m.content}" for m in reversed(history)])
+                        text_to_check = f"Context:\n{combined}\n\nVerify the claims in this conversation."
+                except Exception:
+                    pass
+
+            await self._queue_fact_check_for_message(
+                trigger_message=message,
+                statement_text=text_to_check,
+                statement_author=ref_msg.author,
+                trigger_type="reply",
+                source_message=ref_msg,
+            )
+            return
+
+        # Scenario B: Direct mention with inline statement
+        if mentioned and not message.reference:
+            content = message.content.replace(
+                f"<@{self.bot.user.id}>", ""
+            ).replace(f"<@!{self.bot.user.id}>", "")
+            content = content.strip()
+            if not content:
+                return
+
+            text_to_check = content[:500]
+            
+            match = re.search(r'last\s*(\d+)', content, re.IGNORECASE)
+            if match:
+                try:
+                    limit = min(int(match.group(1)), 10)
+                    history = [msg async for msg in message.channel.history(limit=limit, before=message)]
+                    if history:
+                        combined = "\n".join([f"{m.author.name}: {m.content}" for m in reversed(history)])
+                        text_to_check = f"Context:\n{combined}\n\nVerify the claims in this conversation."
+                except Exception:
+                    pass
+
+            await self._queue_fact_check_for_message(
+                trigger_message=message,
+                statement_text=text_to_check,
+                statement_author=ref_msg.author,
+                trigger_type="reply",
+                source_message=ref_msg,
+            )
+            return
+
+        # Scenario B: Direct mention with inline statement
+        if mentioned and not message.reference:
+            content = message.content.replace(
+                f"<@{self.bot.user.id}>", ""
+            ).replace(f"<@!{self.bot.user.id}>", "")
+            content = content.strip()
+            if not content:
+                return
+
+            text_to_check = content[:500]
+            
+            # Check for "last N" request
+            match = re.search(r'last\s*(\d+)', content, re.IGNORECASE)
+            if match:
+                try:
+                    limit = min(int(match.group(1)), 10)
+                    history = [msg async for msg in message.channel.history(limit=limit, before=message)]
+                    if history:
+                        combined = "\n".join([f"{m.author.name}: {m.content}" for m in reversed(history)])
+                        text_to_check = f"Context:\n{combined}\n\nVerify the claims in this conversation."
+                except Exception:
+                    pass
+
             await self._queue_fact_check_for_message(
                 trigger_message=message,
                 statement_text=text_to_check,
@@ -108,5 +200,5 @@ class MessageListener(commands.Cog):
             )
 
 
-async def setup(bot: AVABot) -> None:
+async def setup(bot: NagromBot) -> None:
     await bot.add_cog(MessageListener(bot))

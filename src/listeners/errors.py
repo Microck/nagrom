@@ -1,9 +1,9 @@
 import discord
 from discord.ext import commands
-from ..bot import AVABot
+from ..bot import NagromBot
 
 class ErrorHandler(commands.Cog):
-    def __init__(self, bot: AVABot):
+    def __init__(self, bot: NagromBot):
         self.bot = bot
 
     @commands.Cog.listener()
@@ -22,5 +22,5 @@ class ErrorHandler(commands.Cog):
         else:
             print(f"Ignoring exception in command {ctx.command}: {error}")
 
-async def setup(bot: AVABot):
+async def setup(bot: NagromBot):
     await bot.add_cog(ErrorHandler(bot))

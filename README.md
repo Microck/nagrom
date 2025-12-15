@@ -16,21 +16,33 @@
 
 ### quickstart
 
+**Option 1: GUI Setup (Recommended)**
+
 ```bash
 # clone the repo
 git clone https://github.com/microck/nagrom.git
 cd nagrom
 
-# setup venv if you want
+# setup venv
 python -m venv .venv
-source .venv/bin/activate  # or .venv\Scripts\activate on windows
+# Activate: 
+# Windows: .\.venv\Scripts\Activate.ps1
+# Linux/Mac: source .venv/bin/activate
 
 # install dependencies
 pip install -r requirements.txt
 
-# minimal config setup
+# Run the setup wizard
+python setup_gui.py
+```
+This will open a browser tab at `http://localhost:8080` where you can configure your tokens, providers, and settings easily.
+
+**Option 2: Manual Setup**
+
+```bash
+# copy example config
 cp config/examples/minimal.yaml config/bot.yaml
-# you need to edit bot.yaml with your keys now. don't skip this.
+# edit bot.yaml with your keys
 
 # run it
 python -m src
@@ -45,8 +57,8 @@ python -m src
 *   [installation](#installation)
 *   [configuration](#configuration)
 *   [usage](#usage)
+*   [commands](#commands)
 *   [troubleshooting](#troubleshooting)
-*   [dependencies](#dependencies)
 
 ---
 
@@ -54,13 +66,16 @@ python -m src
 
 nagrom isn't a wrapper around an llm. it enforces a specific logic loop to verify facts.
 
-*   **bring your own key (BYOK):** supports openrouter, openai, anthropic, or generic openai-compatible endpoints.
+*   **bring your own key (BYOK):** supports Google AI Studio, OpenRouter, OpenAI, Anthropic, or generic OpenAI-compatible endpoints.
 *   **strict verification:** uses a tiered source hierarchy. snopes ranks higher than quora, for obvious reasons.
 *   **async architecture:** built on `discord.py` 2.4+ and `aiohttp`. no blocking calls allowed here.
 *   **structured output:** the llm is forced to output json, which we parse into pretty embeds.
+*   **cost tracking:** estimates token usage and costs per fact-check (owner only).
 *   **rate limiting:** built-in token buckets and cooldowns so your server doesn't bankrupt you.
 *   **flexible triggers:** supports slash commands, replies, mentions, and context menus.
+*   **context aware:** can analyze conversation history (last 10 messages) for context.
 *   **database backed:** keeps a history of checks in sqlite using `sqlalchemy`.
+*   **web gui:** easy-to-use configuration wizard.
 
 ---
 
@@ -116,11 +131,19 @@ pip install -r requirements.txt
 
 ### configuration
 
-configuration is split between `config/bot.yaml` for settings and `config/system_prompt.txt` for the brain.
+You can configure the bot using the Web GUI (`python setup_gui.py`) or by manually editing `config/bot.yaml`.
 
-#### the yaml file
+#### web gui
 
-create `config/bot.yaml`. here is a sane default configuration:
+Run `python setup_gui.py` to launch the configuration interface. It allows you to:
+- Set Discord Token and Owner ID
+- Choose LLM Provider (Google, OpenAI, Anthropic, etc.)
+- Configure Rate Limits
+- Manage Search settings
+
+#### manual config
+
+Create `config/bot.yaml`. here is a sane default configuration:
 
 ```yaml
 discord_token: "${DISCORD_TOKEN}" # loads from env var
@@ -146,12 +169,6 @@ features:
   enable_context_menu: true
 ```
 
-#### the system prompt
-
-nagrom relies on a very specific system prompt to force the llm to output json. if you mess this up, the bot will crash trying to parse the response.
-
-ensure `config/system_prompt.txt` exists and contains the verification logic. see the example in `config/examples/` if you lost it.
-
 #### environment variables
 
 you can set keys directly in the yaml if you don't care about security, but using environment variables is the recommended way.
@@ -172,6 +189,9 @@ someone posts something wrong. you reply to their message and tag the bot.
 > **user a:** google doesn't steal anyones data without their permission.
 > **you (replying to a):** @nagrom check this.
 
+**Context Mode:**
+Reply with `@nagrom context 5` to have the bot read the 5 messages preceding the replied message for context.
+
 #### 2. command
 good for settling bets in real time.
 > `/check statement: the us gdp grew by 2.5% in 2023`
@@ -180,8 +200,34 @@ good for settling bets in real time.
 just ping the bot with a statement.
 > `@nagrom is it true that the beef industry and fashion/textiles industries use ~90x more water than data centers used for AI?`
 
+**History Mode:**
+Mention with `@nagrom last 10` to verify claims made in the last 10 messages of the channel.
+
 #### 4. menu
 right click a message, go to **apps**, and select **check facts**. yes, im lazy to type too.
+
+---
+
+### commands
+
+#### user commands
+| Command | Description |
+| :--- | :--- |
+| `/check <statement>` | Manually verify a specific claim |
+| `/history` | View your recent fact-check results |
+| `/stats [user]` | View accuracy score and verification stats for a user |
+| `/help` | Show the help menu with usage instructions |
+
+#### owner commands
+| Command | Description |
+| :--- | :--- |
+| `/health` | View bot system health (CPU, RAM, Uptime) |
+| `/cost` | View estimated LLM token usage and costs |
+| `/config view` | View current LLM configuration |
+| `/config edit` | Edit LLM configuration on the fly |
+| `t!logs [n]` | View the last n lines of the bot log |
+| `t!retry <id>` | Retry a failed fact-check by ID |
+| `t!reload` | Reload all bot extensions |
 
 ---
 

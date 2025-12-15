@@ -73,7 +73,11 @@ class FactCheck(Base):
     input_text: Mapped[str] = mapped_column(Text, nullable=False)
     statement: Mapped[str] = mapped_column(Text, nullable=False)
     verdict: Mapped[str] = mapped_column(Text, nullable=False)
-    confidence: Mapped[float] = mapped_column(Float, nullable=False)
+    confidence: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+
+    input_tokens: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    output_tokens: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
+    cost: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
 
     raw_response: Mapped[dict] = mapped_column(JSON, nullable=False)
 
@@ -81,6 +85,25 @@ class FactCheck(Base):
         DateTime, default=datetime.utcnow, nullable=False
     )
 
+class ConfigPreset(Base):
+    __tablename__ = "config_presets"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    name: Mapped[str] = mapped_column(Text, unique=True, nullable=False)
+    
+    provider: Mapped[str] = mapped_column(Text, nullable=False)
+    api_key: Mapped[str] = mapped_column(Text, nullable=False)
+    base_url: Mapped[str] = mapped_column(Text, nullable=False)
+    model: Mapped[str] = mapped_column(Text, nullable=False)
+    fallback_models: Mapped[str] = mapped_column(Text, default="", nullable=False) # Comma-separated
+    temperature: Mapped[float] = mapped_column(Float, nullable=False)
+    max_tokens: Mapped[int] = mapped_column(Integer, nullable=False)
+
+    is_active: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
+
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime, default=datetime.utcnow, nullable=False
+    )
 
 class DatabaseManager:
     def __init__(self, url: str):
