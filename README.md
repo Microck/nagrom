@@ -38,6 +38,8 @@ python setup_gui.py
 This will open a browser tab at `http://127.0.0.1:8080` where you can configure your tokens, providers, and settings easily.
 **Note:** For security, the GUI is bound to `localhost` to prevent unauthorized network access.
 
+<!-- SCREENSHOT: Web Configuration GUI showing provider settings -->
+
 **Option 2: Manual Setup**
 
 ```bash
@@ -92,6 +94,29 @@ nagrom acts as a logic engine. when you ask it to verify something, it goes thro
 3.  **retrieval:** looks for sources using configured search providers (Tavily/DuckDuckGo).
 4.  **synthesis:** compares sources against internal knowledge. external evidence wins.
 5.  **response:** formats the verdict as `true`, `false`, `mixed`, or `unverifiable`.
+
+```mermaid
+flowchart TD
+    A[User Message] -->|Reply/Mention/Slash/Menu| B(Discord Listener)
+    B --> C{Rate Limiter}
+    C -->|Allowed| D[Fact Check Queue]
+    C -->|Blocked| X[Cooldown Error]
+    D -->|Worker| E[LLM Provider]
+    
+    subgraph Pipeline
+        E --> F[Intent Classification]
+        F -->|Valid Claim| G[Search Manager]
+        F -->|Prompt Injection| Y[Rejected]
+        G -->|Tavily/DDG| H[External Sources]
+        H --> I[Evidence Synthesis]
+        I --> J[Response Validator]
+        J -->|JSON| K[Verification Result]
+    end
+    
+    K --> L[Build Embed]
+    L --> M[Discord Response]
+    L --> N[(SQLite Database)]
+```
 
 > **note:** checking facts requires an llm capable of tool use or browsing if you want live internet access. otherwise it relies on the model's training data cutoff.
 
@@ -152,6 +177,8 @@ Run `python setup_gui.py` to launch the configuration interface. It allows you t
 - Manage Search settings
 
 The GUI saves your API keys securely encrypted.
+
+<!-- SCREENSHOT: Web GUI configuration interface showing provider dropdown and API key fields -->
 
 #### manual config
 
@@ -248,6 +275,8 @@ someone posts something wrong. you reply to their message and tag the bot.
 > **user a:** google doesn't steal anyones data without their permission.
 > **you (replying to a):** @nagrom check this.
 
+<!-- SCREENSHOT: Discord fact-check result embed showing FALSE verdict with sources -->
+
 **Context Mode:**
 Reply with `@nagrom context 5` to have the bot read the 5 messages preceding the replied message for context.
 
@@ -310,7 +339,5 @@ things go wrong. here is how to fix them.
 ---
 
 ### license
-
-o'saasy license## license
 
 o'saasy license
