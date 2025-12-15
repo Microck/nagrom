@@ -112,10 +112,15 @@ mkdir data
 
 always use a virtual environment. installing global packages is a bad habit.
 
-**windows (powershell)**
+**windows**
 ```powershell
 py -3.11 -m venv .venv
+
+# PowerShell:
 .\.venv\Scripts\Activate.ps1
+
+# Command Prompt (cmd.exe):
+.venv\Scripts\activate.bat
 ```
 
 **linux / macos**

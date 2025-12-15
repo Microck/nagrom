@@ -49,6 +49,18 @@ PROVIDERS = {
     }
 }
 
+# Palette
+COLOR_TAUPE = "#615F5B"
+COLOR_SLATE = "#656B70"
+COLOR_LIGHT_BLUE_GREY = "#8F989D"
+COLOR_WARM_GREY = "#8A8280"
+COLOR_CHARCOAL = "#2D3235"
+
+# New Palette Colors
+COLOR_INPUT_BG = "#7B8389"
+COLOR_INPUT_TEXT = "#303438"
+COLOR_CHARCOAL_NEW = "#2B3034" # Main background color
+COLOR_LABEL_NEW = "#2B3033" # New label color
 
 class SetupGUI:
     def __init__(self):
@@ -103,43 +115,118 @@ class SetupGUI:
             yaml.dump(self.config, f, default_flow_style=False, sort_keys=False)
     
     def build_ui(self):
-        ui.dark_mode().enable()
-        
-        with ui.header().classes("items-center justify-between"):
-            ui.label("nagrom Setup").classes("text-2xl font-bold")
-            ui.link("Documentation", "/docs").classes("text-white")
-        
-        with ui.tabs().classes("w-full") as tabs:
-            discord_tab = ui.tab("Discord")
-            llm_tab = ui.tab("LLM Provider")
-            search_tab = ui.tab("Search")
-            rate_tab = ui.tab("Rate Limits")
-            advanced_tab = ui.tab("Advanced")
-        
-        with ui.tab_panels(tabs, value=discord_tab).classes("w-full"):
-            with ui.tab_panel(discord_tab):
-                self.build_discord_panel()
+        # Force minimal CSS theme
+        ui.add_head_html(f"""
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Roboto+Flex:opsz,wght@8..144,100..1000&display=swap');
             
-            with ui.tab_panel(llm_tab):
-                self.build_llm_panel()
+            body {{
+                background-color: {COLOR_CHARCOAL_NEW} !important;
+                color: {COLOR_LIGHT_BLUE_GREY} !important;
+                font-family: 'Google Sans Flex', 'Roboto Flex', 'Roboto', sans-serif !important;
+            }}
+            .q-card {{
+                background-color: {COLOR_CHARCOAL_NEW} !important;
+                box-shadow: none !important;
+                border: 1px solid {COLOR_TAUPE};
+            }}
+            .q-tab {{
+                color: {COLOR_WARM_GREY};
+            }}
+            .q-tab--active {{
+                color: {COLOR_LIGHT_BLUE_GREY};
+            }}
+            .q-field__control {{
+                background-color: {COLOR_INPUT_BG} !important; 
+                color: {COLOR_INPUT_TEXT} !important;
+            }}
+            .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {{
+                color: {COLOR_INPUT_TEXT} !important;
+            }}
+            .q-field__label {{
+                color: {COLOR_LABEL_NEW} !important;
+                font-weight: 500;
+            }}
+            .text-primary {{ /* For links, etc. */
+                color: {COLOR_LIGHT_BLUE_GREY} !important;
+            }}
+            .bg-primary {{ /* Override for default primary background */
+                background-color: {COLOR_INPUT_BG} !important;
+            }}
+            .q-btn {{
+                background-color: {COLOR_INPUT_BG} !important;
+                color: {COLOR_LABEL_NEW} !important;
+                font-weight: bold;
+            }}
+            .q-btn--flat {{ /* Styling for the Reset button */
+                background-color: transparent !important;
+                color: {COLOR_LIGHT_BLUE_GREY} !important;
+            }}
+            .q-btn .q-icon {{ /* Icons inside buttons, e.g., password toggle */
+                color: {COLOR_LABEL_NEW} !important;
+            }}
+            .q-select__dropdown-icon, .q-field__marginal {{ /* Dropdown arrow, input icons */
+                color: {COLOR_LABEL_NEW} !important;
+            }}
+            .q-menu.q-position-engine.q-popup--menu {{ /* Dropdown menu background */
+                background-color: {COLOR_CHARCOAL_NEW} !important;
+                color: {COLOR_LIGHT_BLUE_GREY} !important;
+                border: 1px solid {COLOR_INPUT_BG};
+            }}
+            .q-item {{ /* Dropdown menu items */
+                color: {COLOR_LIGHT_BLUE_GREY} !important;
+            }}
+            .q-item--active, .q-item--highlighted {{ /* Dropdown active/hover item */
+                background-color: {COLOR_SLATE} !important;
+            }}
+            .q-toggle__thumb {{ /* For ui.switch */
+                color: {COLOR_TAUPE} !important;
+            }}
+            .q-toggle__track {{
+                background-color: {COLOR_SLATE} !important;
+            }}
+        </style>
+        """)
+
+        # Main Container
+        with ui.column().classes("w-full max-w-3xl mx-auto items-center p-8 gap-8"):
             
-            with ui.tab_panel(search_tab):
-                self.build_search_panel()
+            # Logo
+            if Path("assets/logo/logo.png").exists():
+                ui.image("assets/logo/logo.png").classes("w-32 opacity-80 hover:opacity-100 transition-opacity")
             
-            with ui.tab_panel(rate_tab):
-                self.build_rate_limits_panel()
+            # Tabs
+            with ui.tabs().classes("w-full text-lg") as tabs:
+                discord_tab = ui.tab("Discord")
+                llm_tab = ui.tab("LLM")
+                search_tab = ui.tab("Search")
+                rate_tab = ui.tab("Limits")
+                advanced_tab = ui.tab("Advanced")
             
-            with ui.tab_panel(advanced_tab):
-                self.build_advanced_panel()
-        
-        with ui.footer().classes("items-center justify-between"):
-            ui.button("Save Configuration", on_click=self.on_save).props("color=primary")
-            ui.button("Reset to Defaults", on_click=self.on_reset).props("color=negative")
-    
+            # Panels
+            with ui.tab_panels(tabs, value=discord_tab).classes("w-full bg-transparent"):
+                with ui.tab_panel(discord_tab):
+                    self.build_discord_panel()
+                
+                with ui.tab_panel(llm_tab):
+                    self.build_llm_panel()
+                
+                with ui.tab_panel(search_tab):
+                    self.build_search_panel()
+                
+                with ui.tab_panel(rate_tab):
+                    self.build_rate_limits_panel()
+                
+                with ui.tab_panel(advanced_tab):
+                    self.build_advanced_panel()
+            
+            # Action Buttons (Minimal)
+            with ui.row().classes("w-full justify-end gap-4 mt-8"):
+                ui.button("Reset", on_click=self.on_reset).props("flat")
+                ui.button("Save", on_click=self.on_save)
+
     def build_discord_panel(self):
-        with ui.card().classes("w-full max-w-2xl mx-auto"):
-            ui.label("Discord Bot Settings").classes("text-xl font-semibold mb-4")
-            
+        with ui.column().classes("w-full gap-6"):
             discord_cfg = self.config.setdefault("discord", {})
             
             self.discord_token = ui.input(
@@ -152,40 +239,26 @@ class SetupGUI:
             
             with ui.row().classes("w-full gap-4"):
                 self.discord_prefix = ui.input(
-                    "Command Prefix",
+                    "Prefix",
                     value=discord_cfg.get("prefix", "t!")
                 ).classes("w-32").props('outlined')
                 self.discord_prefix.on("blur", lambda: self.update_config("discord", "prefix", self.discord_prefix.value))
                 
                 self.discord_owner = ui.input(
-                    "Owner ID (Discord User ID)",
+                    "Owner ID",
                     value=str(discord_cfg.get("owner_id", 0))
                 ).classes("flex-1").props('outlined')
                 self.discord_owner.on("blur", lambda: self.update_config("discord", "owner_id", int(self.discord_owner.value or 0)))
-            
-            ui.markdown("""
-**How to get your Bot Token:**
-1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
-2. Create a new application or select existing
-3. Go to Bot tab and click "Reset Token"
-4. Copy the token and paste it above
-
-**How to get your Owner ID:**
-1. Enable Developer Mode in Discord Settings > Advanced
-2. Right-click your username and select "Copy User ID"
-            """).classes("text-sm text-gray-400 mt-4")
     
     def build_llm_panel(self):
-        with ui.card().classes("w-full max-w-2xl mx-auto"):
-            ui.label("LLM Provider Settings").classes("text-xl font-semibold mb-4")
-            
+        with ui.column().classes("w-full gap-6"):
             llm_cfg = self.config.setdefault("llm", {})
             current_provider = llm_cfg.get("provider", "google_ai_studio")
             
             provider_options = {k: v["name"] for k, v in PROVIDERS.items()}
             self.llm_provider = ui.select(
-                "Provider",
                 options=provider_options,
+                label="Provider",
                 value=current_provider,
                 on_change=self.on_provider_change
             ).classes("w-full").props('outlined')
@@ -197,12 +270,6 @@ class SetupGUI:
                 password_toggle_button=True
             ).classes("w-full").props('outlined')
             self.llm_api_key.on("blur", lambda: self.update_config("llm", "api_key", self.llm_api_key.value))
-            
-            self.api_key_link = ui.link(
-                f"Get API Key from {PROVIDERS[current_provider]['name']}",
-                PROVIDERS[current_provider]["api_key_url"],
-                new_tab=True
-            ).classes("text-blue-400 text-sm")
             
             self.llm_base_url = ui.input(
                 "Base URL",
@@ -218,7 +285,7 @@ class SetupGUI:
             
             with ui.row().classes("w-full gap-4"):
                 self.llm_temp = ui.number(
-                    "Temperature",
+                    "Temp",
                     value=llm_cfg.get("temperature", 0.0),
                     min=0.0,
                     max=2.0,
@@ -245,18 +312,16 @@ class SetupGUI:
             ))
     
     def build_search_panel(self):
-        with ui.card().classes("w-full max-w-2xl mx-auto"):
-            ui.label("Search Provider Settings").classes("text-xl font-semibold mb-4")
-            
+        with ui.column().classes("w-full gap-6"):
             search_cfg = self.config.setdefault("search", {})
             
             self.search_enabled = ui.switch(
                 "Enable Web Search",
                 value=search_cfg.get("enabled", True)
-            )
+            ).props('color=grey-5')
             self.search_enabled.on("change", lambda: self.update_config("search", "enabled", self.search_enabled.value))
             
-            ui.label("Tavily API (Recommended)").classes("text-lg font-medium mt-4")
+            ui.separator().classes(f"bg-{COLOR_TAUPE}")
             
             self.tavily_key = ui.input(
                 "Tavily API Key",
@@ -266,30 +331,21 @@ class SetupGUI:
             ).classes("w-full").props('outlined')
             self.tavily_key.on("blur", lambda: self.update_config("search", "tavily_api_key", self.tavily_key.value))
             
-            ui.link("Get Tavily API Key", "https://tavily.com/", new_tab=True).classes("text-blue-400 text-sm")
-            
             self.tavily_results = ui.number(
-                "Max Search Results",
+                "Results Count",
                 value=search_cfg.get("tavily_max_results", 5),
                 min=1,
                 max=10
             ).classes("w-32").props('outlined')
             self.tavily_results.on("blur", lambda: self.update_config("search", "tavily_max_results", int(self.tavily_results.value or 5)))
-            
-            ui.markdown("""
-**Note:** Without a search provider configured, fact checks will return UNVERIFIABLE 
-as the bot cannot fetch external sources. Tavily is recommended for best results.
-            """).classes("text-sm text-gray-400 mt-4")
     
     def build_rate_limits_panel(self):
-        with ui.card().classes("w-full max-w-2xl mx-auto"):
-            ui.label("Rate Limit Settings").classes("text-xl font-semibold mb-4")
-            
+        with ui.column().classes("w-full gap-6"):
             rate_cfg = self.config.setdefault("rate_limits", {})
             
             with ui.row().classes("w-full gap-4"):
                 self.rate_cooldown = ui.number(
-                    "User Cooldown (seconds)",
+                    "Cooldown (s)",
                     value=rate_cfg.get("user_cooldown", 30),
                     min=0,
                     max=300
@@ -297,7 +353,7 @@ as the bot cannot fetch external sources. Tavily is recommended for best results
                 self.rate_cooldown.on("blur", lambda: self.update_config("rate_limits", "user_cooldown", int(self.rate_cooldown.value or 30)))
                 
                 self.rate_daily = ui.number(
-                    "Daily Guild Limit",
+                    "Daily Limit",
                     value=rate_cfg.get("daily_guild_limit", 100),
                     min=1,
                     max=10000
@@ -306,7 +362,7 @@ as the bot cannot fetch external sources. Tavily is recommended for best results
             
             with ui.row().classes("w-full gap-4"):
                 self.rate_tokens = ui.number(
-                    "Bucket Tokens",
+                    "Bucket Size",
                     value=rate_cfg.get("bucket_tokens", 5),
                     min=1,
                     max=100
@@ -314,26 +370,16 @@ as the bot cannot fetch external sources. Tavily is recommended for best results
                 self.rate_tokens.on("blur", lambda: self.update_config("rate_limits", "bucket_tokens", int(self.rate_tokens.value or 5)))
                 
                 self.rate_refill = ui.number(
-                    "Bucket Refill Rate (per sec)",
+                    "Refill Rate",
                     value=rate_cfg.get("bucket_refill_rate", 1.0),
                     min=0.1,
                     max=10.0,
                     step=0.1
                 ).classes("flex-1").props('outlined')
                 self.rate_refill.on("blur", lambda: self.update_config("rate_limits", "bucket_refill_rate", float(self.rate_refill.value or 1.0)))
-            
-            self.rate_queue = ui.number(
-                "Queue Max Size",
-                value=rate_cfg.get("queue_max_size", 50),
-                min=1,
-                max=500
-            ).classes("w-48").props('outlined')
-            self.rate_queue.on("blur", lambda: self.update_config("rate_limits", "queue_max_size", int(self.rate_queue.value or 50)))
     
     def build_advanced_panel(self):
-        with ui.card().classes("w-full max-w-2xl mx-auto"):
-            ui.label("Advanced Settings").classes("text-xl font-semibold mb-4")
-            
+        with ui.column().classes("w-full gap-6"):
             db_cfg = self.config.setdefault("database", {})
             
             self.db_url = ui.input(
@@ -342,18 +388,10 @@ as the bot cannot fetch external sources. Tavily is recommended for best results
             ).classes("w-full").props('outlined')
             self.db_url.on("blur", lambda: self.update_config("database", "url", self.db_url.value))
             
-            ui.markdown("""
-**Database URL Format:**
-- SQLite: `sqlite+aiosqlite:///data/nagrom.db`
-- PostgreSQL: `postgresql+asyncpg://user:pass@host:5432/dbname`
-            """).classes("text-sm text-gray-400 mt-2")
-            
-            ui.separator().classes("my-4")
-            
-            ui.label("Raw Configuration").classes("text-lg font-medium")
+            ui.label("Raw Config").classes("text-sm opacity-50 mt-4")
             self.raw_config = ui.textarea(
                 value=yaml.dump(self.config, default_flow_style=False, sort_keys=False)
-            ).classes("w-full h-64 font-mono text-sm").props('outlined')
+            ).classes("w-full h-64 font-mono text-xs").props('outlined')
     
     def update_config(self, section: str, key: str, value):
         if section not in self.config:
@@ -369,8 +407,6 @@ as the bot cannot fetch external sources. Tavily is recommended for best results
         provider_info = PROVIDERS[provider]
         self.llm_base_url.value = provider_info["base_url"]
         self.llm_model.value = provider_info["default_model"]
-        self.api_key_link.text = f"Get API Key from {provider_info['name']}"
-        self.api_key_link.props(f'href="{provider_info["api_key_url"]}"')
         
         self.update_config("llm", "base_url", provider_info["base_url"])
         self.update_config("llm", "model", provider_info["default_model"])
@@ -378,13 +414,13 @@ as the bot cannot fetch external sources. Tavily is recommended for best results
     def on_save(self):
         try:
             self.save_config()
-            ui.notify("Configuration saved successfully!", type="positive")
+            ui.notify("Saved", type="positive", color=COLOR_TAUPE)
         except Exception as e:
-            ui.notify(f"Error saving configuration: {e}", type="negative")
+            ui.notify(f"Error: {e}", type="negative")
     
     def on_reset(self):
         self.config = self.default_config()
-        ui.notify("Configuration reset to defaults. Click Save to apply.", type="warning")
+        ui.notify("Reset to defaults", type="warning")
         ui.navigate.reload()
 
 
@@ -396,12 +432,12 @@ def main():
     gui.build_ui()
     
     ui.run(
-        title="nagrom Setup",
+        title="setup", # Minimal title
         host="127.0.0.1",
         port=8080,
         reload=False,
         show=True,
-        dark=True
+        favicon="assets/logo/icon.png" if Path("assets/logo/icon.png").exists() else None
     )
 
 
