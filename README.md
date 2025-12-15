@@ -70,8 +70,9 @@ python -m src
 nagrom isn't a wrapper around an llm. it enforces a specific logic loop to verify facts.
 
 *   **bring your own key (BYOK):** supports Google AI Studio, OpenRouter, OpenAI, Anthropic, or generic OpenAI-compatible endpoints.
+*   **smart retrieval:** searches the web using **Tavily** (recommended) or **DuckDuckGo** to find real-time evidence.
 *   **strict verification:** uses a tiered source hierarchy. snopes ranks higher than quora, for obvious reasons.
-*   **async architecture:** built on `discord.py` 2.4+ and `aiohttp`. no blocking calls allowed here.
+*   **async architecture:** built on `discord.py` 2.6+ and `aiohttp`. no blocking calls allowed here.
 *   **structured output:** the llm is forced to output json, which we parse into pretty embeds.
 *   **cost tracking:** estimates token usage and costs per fact-check (owner only).
 *   **rate limiting:** built-in token buckets and cooldowns so your server doesn't bankrupt you.
@@ -88,7 +89,7 @@ nagrom acts as a logic engine. when you ask it to verify something, it goes thro
 
 1.  **intent classification:** figures out if you are asking for a fact check or just trying to prompt inject.
 2.  **extraction:** pulls out the claims, dates, and entities.
-3.  **retrieval:** looks for sources based on a trust tier (tier 1 is reuters/snopes, tier 4 is twitter).
+3.  **retrieval:** looks for sources using configured search providers (Tavily/DuckDuckGo).
 4.  **synthesis:** compares sources against internal knowledge. external evidence wins.
 5.  **response:** formats the verdict as `true`, `false`, `mixed`, or `unverifiable`.
 
@@ -146,6 +147,7 @@ You can configure the bot using the Web GUI (`python setup_gui.py`) or by manual
 Run `python setup_gui.py` to launch the configuration interface. It allows you to:
 - Set Discord Token and Owner ID
 - Choose LLM Provider (Google, OpenAI, Anthropic, etc.)
+- Configure Search Providers (Tavily)
 - Configure Rate Limits
 - Manage Search settings
 
@@ -170,6 +172,12 @@ llm:
       max_tokens: 4000
       temperature: 0.0 # keep this low for facts
 
+search:
+  enabled: true
+  provider: "auto" # or "tavily", "ddg"
+  tavily_api_key: "${TAVILY_API_KEY}"
+  tavily_max_results: 5
+
 rate_limits:
   user_cooldown_seconds: 30
   guild_daily_limit: 100
@@ -184,8 +192,18 @@ features:
 you can set keys directly in the yaml if you don't care about security, but using environment variables is the recommended way.
 
 ```bash
+# Core
 export DISCORD_TOKEN="your_token_here"
-export OPENROUTER_KEY="your_key_here"
+
+# LLM Providers
+export OPENROUTER_API_KEY="your_key_here"
+export OPENAI_API_KEY="your_key_here"
+export ANTHROPIC_API_KEY="your_key_here"
+export GOOGLE_AI_STUDIO_API_KEY="your_key_here"
+
+# Search
+export TAVILY_API_KEY="your_key_here"
+export SEARCH_PROVIDER="auto"
 ```
 
 ---
@@ -247,6 +265,8 @@ Mention with `@nagrom last 10` to verify claims made in the last 10 messages of 
 #### 4. menu
 right click a message, go to **apps**, and select **check facts**. yes, im lazy to type too.
 
+<!-- SCREENSHOT: Discord Context Menu "Apps > Check Facts" -->
+
 ---
 
 ### commands
@@ -266,6 +286,8 @@ right click a message, go to **apps**, and select **check facts**. yes, im lazy 
 | `/cost` | View estimated LLM token usage and costs |
 | `/config view` | View current LLM configuration |
 | `/config edit` | Edit LLM configuration on the fly |
+| `/config save_preset <name>` | Save current config as a named preset |
+| `/config load_preset` | Load a saved configuration preset |
 | `t!logs [n]` | View the last n lines of the bot log |
 | `t!retry <id>` | Retry a failed fact-check by ID |
 | `t!reload` | Reload all bot extensions |
@@ -288,5 +310,7 @@ things go wrong. here is how to fix them.
 ---
 
 ### license
+
+o'saasy license## license
 
 o'saasy license
