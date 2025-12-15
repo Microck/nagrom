@@ -38,8 +38,6 @@ python setup_gui.py
 This will open a browser tab at `http://127.0.0.1:8080` where you can configure your tokens, providers, and settings easily.
 **Note:** For security, the GUI is bound to `localhost` to prevent unauthorized network access.
 
-<!-- SCREENSHOT: Web Configuration GUI showing provider settings -->
-
 **Option 2: Manual Setup**
 
 ```bash
@@ -50,6 +48,9 @@ cp config/examples/minimal.yaml config/bot.yaml
 # run it
 python -m src
 ```
+
+
+<img width="1920" height="auto" alt="page" src="assets/gui.gif" />
 
 ---
 
@@ -178,7 +179,6 @@ Run `python setup_gui.py` to launch the configuration interface. It allows you t
 
 The GUI saves your API keys securely encrypted.
 
-<!-- SCREENSHOT: Web GUI configuration interface showing provider dropdown and API key fields -->
 
 #### manual config
 
@@ -275,8 +275,6 @@ someone posts something wrong. you reply to their message and tag the bot.
 > **user a:** google doesn't steal anyones data without their permission.
 > **you (replying to a):** @nagrom check this.
 
-<!-- SCREENSHOT: Discord fact-check result embed showing FALSE verdict with sources -->
-
 **Context Mode:**
 Reply with `@nagrom context 5` to have the bot read the 5 messages preceding the replied message for context.
 
@@ -294,7 +292,7 @@ Mention with `@nagrom last 10` to verify claims made in the last 10 messages of 
 #### 4. menu
 right click a message, go to **apps**, and select **check facts**. yes, im lazy to type too.
 
-<!-- SCREENSHOT: Discord Context Menu "Apps > Check Facts" -->
+<img width="1920" height="auto" alt="page" src="assets/checkcommand.jpg" />
 
 ---
 
@@ -320,6 +318,8 @@ right click a message, go to **apps**, and select **check facts**. yes, im lazy 
 | `t!logs [n]` | View the last n lines of the bot log |
 | `t!retry <id>` | Retry a failed fact-check by ID |
 | `t!reload` | Reload all bot extensions |
+
+<img width="1920" height="auto" alt="page" src="assets/helpcommand.jpg" />
 
 ---
 
