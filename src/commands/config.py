@@ -63,37 +63,48 @@ class ConfigCog(commands.Cog):
         current_config = self.bot.config.llm
 
         class ConfigEditModal(discord.ui.Modal, title="Edit LLM Configuration"):
-            provider_input = discord.ui.TextInput(
-                label="Provider",
-                default=current_config.provider,
-                required=True,
-                max_length=50,
-            )
-            model_input = discord.ui.TextInput(
-                label="Model",
-                default=current_config.model,
-                required=True,
-                max_length=100,
-            )
-            base_url_input = discord.ui.TextInput(
-                label="Base URL",
-                default=current_config.base_url,
-                required=True,
-                max_length=200,
-            )
-            api_key_input = discord.ui.TextInput(
-                label="API Key",
-                default=current_config.api_key, # Pre-fill for convenience
-                required=True,
-                max_length=200,
-                style=discord.TextStyle.short,
-            )
-            fallback_models_input = discord.ui.TextInput(
-                label="Fallback Models (comma-separated)",
-                default=", ".join(current_config.fallback_models),
-                required=False,
-                max_length=500,
-            )
+            def __init__(self, bot: NagromBot, original_config: LLMConfig):
+                super().__init__()
+                self.bot = bot
+                self.original_config = original_config
+                
+                self.provider_input = discord.ui.TextInput(
+                    label="Provider",
+                    default=original_config.provider,
+                    required=True,
+                    max_length=50,
+                )
+                self.model_input = discord.ui.TextInput(
+                    label="Model",
+                    default=original_config.model,
+                    required=True,
+                    max_length=100,
+                )
+                self.base_url_input = discord.ui.TextInput(
+                    label="Base URL",
+                    default=original_config.base_url,
+                    required=True,
+                    max_length=200,
+                )
+                self.api_key_input = discord.ui.TextInput(
+                    label="API Key",
+                    default=original_config.api_key,
+                    required=True,
+                    max_length=200,
+                    style=discord.TextStyle.short,
+                )
+                self.fallback_models_input = discord.ui.TextInput(
+                    label="Fallback Models (comma-separated)",
+                    default=", ".join(original_config.fallback_models),
+                    required=False,
+                    max_length=500,
+                )
+                
+                self.add_item(self.provider_input)
+                self.add_item(self.model_input)
+                self.add_item(self.base_url_input)
+                self.add_item(self.api_key_input)
+                self.add_item(self.fallback_models_input)
 
             async def on_submit(self, interaction: discord.Interaction):
                 new_llm_config = LLMConfig(
@@ -102,8 +113,8 @@ class ConfigCog(commands.Cog):
                     base_url=self.base_url_input.value,
                     model=self.model_input.value,
                     fallback_models=[m.strip() for m in self.fallback_models_input.value.split(',') if m.strip()],
-                    temperature=current_config.temperature, # Keep old for now, could add to modal
-                    max_tokens=current_config.max_tokens,   # Keep old for now, could add to modal
+                    temperature=self.original_config.temperature,
+                    max_tokens=self.original_config.max_tokens,
                 )
 
                 # Update bot's active config
@@ -117,7 +128,7 @@ class ConfigCog(commands.Cog):
                 logger.exception("Error in config edit modal: %s", error)
                 await interaction.response.send_message("An error occurred during config update.", ephemeral=True)
 
-        await interaction.response.send_modal(ConfigEditModal(bot=self.bot))
+        await interaction.response.send_modal(ConfigEditModal(self.bot, current_config))
 
 
     @config_group.command(name="save_preset", description="Save the current active config as a new preset (Owner Only).")
@@ -162,8 +173,9 @@ class ConfigCog(commands.Cog):
             ]
 
             class PresetSelect(discord.ui.Select):
-                def __init__(self):
+                def __init__(self, bot: NagromBot):
                     super().__init__(placeholder="Choose a preset to load...", options=options)
+                    self.bot = bot
                 
                 async def callback(self, interaction: discord.Interaction):
                     selected_id = int(self.values[0])
@@ -194,7 +206,7 @@ class ConfigCog(commands.Cog):
 
 
             view = discord.ui.View()
-            view.add_item(PresetSelect())
+            view.add_item(PresetSelect(self.bot))
             await interaction.response.send_message("Select a configuration preset:", view=view, ephemeral=True)
 
 async def setup(bot: NagromBot):

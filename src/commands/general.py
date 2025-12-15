@@ -161,17 +161,21 @@ class GeneralCommands(commands.Cog):
             )
             
             for i, check in enumerate(fact_checks, 1):
-                statement = check.statement[:100] + "..." if len(check.statement) > 100 else check.statement
+                statement = check.statement[:100] + "..." if check.statement and len(check.statement) > 100 else (check.statement or "N/A")
+                verdict_str = check.verdict or "unknown"
                 verdict_emoji = {
                     "true": "✅",
                     "false": "❌", 
                     "mixed": "⚠️",
                     "unverifiable": "❓"
-                }.get(check.verdict.lower(), "🤔")
+                }.get(verdict_str.lower(), "🤔")
+                
+                confidence_val = check.confidence if check.confidence is not None else 0.0
+                created_at_str = check.created_at.strftime('%Y-%m-%d %H:%M') if check.created_at else "N/A"
                 
                 embed.add_field(
-                    name=f"{i}. {verdict_emoji} {check.verdict.title()}",
-                    value=f"**Statement:** {statement}\n**Confidence:** {check.confidence * 100:.1f}%\n**Date:** {check.created_at.strftime('%Y-%m-%d %H:%M')}",
+                    name=f"{i}. {verdict_emoji} {verdict_str.title()}",
+                    value=f"**Statement:** {statement}\n**Confidence:** {confidence_val * 100:.1f}%\n**Date:** {created_at_str}",
                     inline=False
                 )
             
