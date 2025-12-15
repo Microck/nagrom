@@ -35,7 +35,8 @@ pip install -r requirements.txt
 # Run the setup wizard
 python setup_gui.py
 ```
-This will open a browser tab at `http://localhost:8080` where you can configure your tokens, providers, and settings easily.
+This will open a browser tab at `http://127.0.0.1:8080` where you can configure your tokens, providers, and settings easily.
+**Note:** For security, the GUI is bound to `localhost` to prevent unauthorized network access.
 
 **Option 2: Manual Setup**
 
@@ -56,6 +57,8 @@ python -m src
 *   [how it works](#how-it-works)
 *   [installation](#installation)
 *   [configuration](#configuration)
+*   [docker](#docker)
+*   [security](#security)
 *   [usage](#usage)
 *   [commands](#commands)
 *   [troubleshooting](#troubleshooting)
@@ -141,6 +144,8 @@ Run `python setup_gui.py` to launch the configuration interface. It allows you t
 - Configure Rate Limits
 - Manage Search settings
 
+The GUI saves your API keys securely encrypted.
+
 #### manual config
 
 Create `config/bot.yaml`. here is a sane default configuration:
@@ -177,6 +182,37 @@ you can set keys directly in the yaml if you don't care about security, but usin
 export DISCORD_TOKEN="your_token_here"
 export OPENROUTER_KEY="your_key_here"
 ```
+
+---
+
+### docker
+
+You can quickly deploy nagrom using Docker Compose.
+
+**1. Configure locally first (Recommended)**
+It is recommended to run the `setup_gui.py` on your local machine first to generate the `config/bot.yaml` and `.env` file containing your encryption key.
+
+```bash
+# Run setup locally
+python setup_gui.py
+```
+
+**2. Deploy**
+Once you have your `config/` directory and `.env` file ready:
+
+```bash
+docker-compose up -d
+```
+
+**Note:** The container mounts `./config` and `./data` volumes. Ensure your `.env` file (containing `NAGROM_ENCRYPTION_KEY`) is in the root directory so Docker can read it.
+
+---
+
+### security
+
+*   **Encryption:** API keys stored in the database or config presets are encrypted using `cryptography` (Fernet). The encryption key is stored in your `.env` file as `NAGROM_ENCRYPTION_KEY`. **Do not lose this key**, or you will not be able to decrypt your stored credentials.
+*   **Prompt Injection:** The system uses XML-tagging (`<source_data>`) to isolate external search results from the LLM's instruction set, mitigating indirect prompt injection attacks.
+*   **GUI Access:** The configuration GUI is bound to `127.0.0.1` by default to prevent unauthorized access from the network.
 
 ---
 

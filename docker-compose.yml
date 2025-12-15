@@ -6,5 +6,12 @@ services:
     volumes:
       - ./config:/app/config
       - ./data:/app/data
+      - ./logs:/app/logs
+    env_file:
+      - .env
     environment:
       - PYTHONUNBUFFERED=1
+    # Port 8080 is only needed if you plan to run the setup_gui.py inside the container
+    # (Not recommended as it requires unbinding localhost restriction)
+    # ports:
+    #   - "8080:8080"
