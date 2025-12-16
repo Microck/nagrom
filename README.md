@@ -341,3 +341,14 @@ things go wrong. here is how to fix them.
 ### license
 
 o'saasy license
+
+---
+
+### to-do
+- fix mentions not working at all
+- add context/history to apps
+- add auto invite generation in gui
+- rich presence
+- different color from unverified (gray) to mixed (yellow)
+
+
