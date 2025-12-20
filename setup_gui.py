@@ -249,6 +249,28 @@ class SetupGUI:
                     value=str(discord_cfg.get("owner_id", 0))
                 ).classes("flex-1").props('outlined')
                 self.discord_owner.on("blur", lambda: self.update_config("discord", "owner_id", int(self.discord_owner.value or 0)))
+            
+            ui.separator().classes(f"bg-{COLOR_TAUPE}")
+            
+            with ui.row().classes("w-full gap-4 items-end"):
+                self.bot_client_id = ui.input(
+                    "Bot Client ID (for invite)",
+                    value=discord_cfg.get("client_id", "")
+                ).classes("flex-1").props('outlined')
+                self.bot_client_id.on("blur", lambda: self.update_config("discord", "client_id", self.bot_client_id.value))
+                
+                ui.button("Generate Invite", on_click=self.generate_invite_url).props('outline')
+            
+            self.invite_url_display = ui.input(
+                "Invite URL",
+                value=""
+            ).classes("w-full").props('outlined readonly')
+            
+            with ui.row().classes("w-full gap-2"):
+                ui.button("Copy", on_click=self.copy_invite_url).props('flat dense')
+                ui.link("Open in Browser", target="_blank").bind_visibility_from(
+                    self, 'invite_url_display', backward=lambda x: bool(x.value)
+                ).props('flat dense').bind_text_from(self.invite_url_display, 'value', backward=lambda _: "Open in Browser")
     
     def build_llm_panel(self):
         with ui.column().classes("w-full gap-6"):
@@ -422,6 +444,26 @@ class SetupGUI:
         self.config = self.default_config()
         ui.notify("Reset to defaults", type="warning")
         ui.navigate.reload()
+    
+    def generate_invite_url(self):
+        client_id = self.bot_client_id.value.strip()
+        if not client_id:
+            ui.notify("Enter Bot Client ID first", type="warning")
+            return
+        
+        permissions = 274878024704
+        scopes = "bot%20applications.commands"
+        url = f"https://discord.com/api/oauth2/authorize?client_id={client_id}&permissions={permissions}&scope={scopes}"
+        self.invite_url_display.value = url
+        ui.notify("Invite URL generated", type="positive", color=COLOR_TAUPE)
+    
+    def copy_invite_url(self):
+        url = self.invite_url_display.value
+        if not url:
+            ui.notify("Generate URL first", type="warning")
+            return
+        ui.run_javascript(f'navigator.clipboard.writeText("{url}")')
+        ui.notify("Copied to clipboard", type="positive", color=COLOR_TAUPE)
 
 
 def main():

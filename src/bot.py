@@ -132,7 +132,13 @@ class NagromBot(commands.Bot):
     async def on_ready(self) -> None:
         logger.info("Logged in as %s (ID: %s)", self.user, self.user.id if self.user else "N/A")
         
-        # Set bot avatar to default logo if not already set
+        activity = discord.Activity(
+            type=discord.ActivityType.watching,
+            name="for facts to check",
+            buttons=[{"label": "GitHub", "url": "https://github.com/Microck/nagrom"}]
+        )
+        await self.change_presence(activity=activity, status=discord.Status.online)
+        
         try:
             if self.user and self.user.avatar is None:
                 logo_path = "assets/logo/logo.png"
@@ -307,8 +313,10 @@ class NagromBot(commands.Bot):
             color = discord.Color(0x57F287)
             if os.path.exists("assets/true.png"):
                 file = discord.File("assets/true.png", filename="true.png")
+        elif verdict_upper == "MIXED":
+            color = discord.Color(0xFEE75C)
         else:
-            color = discord.Color(0xFEE75C)  # Yellow for UNVERIFIED, MIXED, etc.
+            color = discord.Color(0x95A5A6)
 
         embed = discord.Embed(
             # title="Fact Check Result", 

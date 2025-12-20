@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import re
+
 import discord
 from discord.ext import commands
 
@@ -94,68 +96,6 @@ class MessageListener(commands.Cog):
                     history = [msg async for msg in message.channel.history(limit=limit, before=ref_msg)]
                     context_text = "\n".join([f"{m.author.name}: {m.content}" for m in reversed(history)])
                     text_to_check = f"{context_text}\n{ref_msg.author.name}: {ref_msg.content}\n\nTarget Claim: {text_to_check}"
-                except Exception:
-                    pass
-
-            await self._queue_fact_check_for_message(
-                trigger_message=message,
-                statement_text=text_to_check,
-                statement_author=ref_msg.author,
-                trigger_type="reply",
-                source_message=ref_msg,
-            )
-            return
-
-        # Scenario B: Direct mention with inline statement
-        if mentioned and not message.reference:
-            content = message.content.replace(
-                f"<@{self.bot.user.id}>", ""
-            ).replace(f"<@!{self.bot.user.id}>", "")
-            content = content.strip()
-            if not content:
-                return
-
-            text_to_check = content[:500]
-            
-            match = re.search(r'last\s*(\d+)', content, re.IGNORECASE)
-            if match:
-                try:
-                    limit = min(int(match.group(1)), 10)
-                    history = [msg async for msg in message.channel.history(limit=limit, before=message)]
-                    if history:
-                        combined = "\n".join([f"{m.author.name}: {m.content}" for m in reversed(history)])
-                        text_to_check = f"Context:\n{combined}\n\nVerify the claims in this conversation."
-                except Exception:
-                    pass
-
-            await self._queue_fact_check_for_message(
-                trigger_message=message,
-                statement_text=text_to_check,
-                statement_author=ref_msg.author,
-                trigger_type="reply",
-                source_message=ref_msg,
-            )
-            return
-
-        # Scenario B: Direct mention with inline statement
-        if mentioned and not message.reference:
-            content = message.content.replace(
-                f"<@{self.bot.user.id}>", ""
-            ).replace(f"<@!{self.bot.user.id}>", "")
-            content = content.strip()
-            if not content:
-                return
-
-            text_to_check = content[:500]
-            
-            match = re.search(r'last\s*(\d+)', content, re.IGNORECASE)
-            if match:
-                try:
-                    limit = min(int(match.group(1)), 10)
-                    history = [msg async for msg in message.channel.history(limit=limit, before=message)]
-                    if history:
-                        combined = "\n".join([f"{m.author.name}: {m.content}" for m in reversed(history)])
-                        text_to_check = f"Context:\n{combined}\n\nVerify the claims in this conversation."
                 except Exception:
                     pass
 
